@@ -194,8 +194,9 @@ ROS中可以利用这种方式根据来自不同来源的（部分）姿态测�
 
 ![zbot 3d 模型](./pics/94.png)
 
-启动zbot 唤起文件，会运行起zbot底盘驱动。默认会启动键盘控制程序。需要说明的是开机时zbot 默认处于急停使能状态，无法进行运动控制。此时应手动取消急停状态。通过VNC连接远程桌面，或者在zbot显示屏上可以看到自动运行的zbot控制面板程序。可以找到急停控制按钮。点击该按钮即改变急停状态。
+启动zbot 唤起文件，会运行起zbot底盘驱动。默认会启动键盘控制程序。需要说明的是开机时zbot 默认处于急停使能状态，无法进行运动控制。此时应手动取消急停状态。通过VNC连接远程桌面，或者在zbot显示屏上可以看到自动运行的zbot控制面板程序。可以找到急停控制按钮。点击该按钮即改变急停状态。取消急停状态后，即可使用键盘按钮控制zbot3机器人移动.方向按钮为 u,i,o,j,k,l,m,",","." 按键Q加速，按键Z减速。
 
+![急停按钮](./pics/152.png)
 
 
 ### 2.3. <a name='-1'></a>启动雷达
@@ -406,7 +407,7 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 | 数据位 | 含义       | 默认值  |  说明                    |
 |:---:|:--------:|:----:|:----------------------:|
 | 1   | 帧头       | 0x7B | 固定值                    |
-| 2   | 气泵开关     | 0    | 0：关闭 1：开启              |
+| 2   | 急停控制     | 0    | 1：使能急停 2：失能急停   0：不控制           |
 | 3~4 | x方向目标速度值 |      | 放大1000倍，低位在前，高位在后，1位小数 |
 | 5~6 | y方向目标速度值 |      | 放大1000倍，低位在前，高位在后，1位小数 |
 | 7~8 | z方向目标速度值 |      | 放大1000倍，低位在前，高位在后，1位小数 |
@@ -420,7 +421,7 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 | 数据位   | 含义      | 默认值  |  说明                     |
 |:-----:|:-------:|:----:|:-----------------------:|
 | 1     | 帧头      | 0x7B | 固定值                     |
-| 2     | 保留位     | 0    |                         |
+| 2     | 模式状态     |     |  0：自动 1：手动 2：自动，急停  3：手动急停     | 运行状态位   |                         |
 | 3~4   | x方向速度值  |      | 放大1000倍，低位在前，高位在后，1位小数  |
 | 5~6   | y方向速度值  |      | 放大1000倍，低位在前，高位在后，1位小数  |
 | 7~8   | z方向速度值  |      | 放大1000倍，低位在前，高位在后，1位小数  |
@@ -439,17 +440,27 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 ``` c++
 uint8_t *ZbotSerial::twistToSerial()
     {
-        uint8_t *serialData = new uint8_t[11];
+        uint8_t *serialData = new uint8_t[15];
         uint8_t *temp = new uint8_t[2];
-        memset(serialData, 0, 11); // initialize
+
+        static int kp, ki;
+        //get pid param from server
+        nh.getParam("/zbot3_drive/Kp",kp);
+        nh.getParam("/zbot3_drive/Ki",ki);
+
+        memset(serialData, 0, 15); // initialize
         serialData[0] = 0x7B;      // frame header
-        if (pumpOn)
+        if (emergencyControl==EMERGENCY_ON)
         {
+            // enable emergency stop.
             serialData[1] = 1;
         }
-        else
+        else if(emergencyControl==EMERGENCY_CANCLE)
         {
-            serialData[1] = 0;
+            serialData[1] = 2;
+            emergencyControl=0;
+        }else{
+            serialData[1]=0;
         }
         if (twist != nullptr)
         {
@@ -480,10 +491,27 @@ uint8_t *ZbotSerial::twistToSerial()
             {
                 ROS_ERROR_STREAM("无效的z方向速度值!");
             }
-            serialData[9] = checkSum(serialData, 9);
-            serialData[10] = 0x7D;
-            // twist->linear.x=twist->linear.y=twist->linear.z=0;
-            // twist->angular.x=twist->angular.y=twist->angular.z=0;
+            temp=shortConverter(kp);
+            if (temp != nullptr)
+            {
+                memcpy(serialData + 9 * sizeof(uint8_t), temp, sizeof(ushort));
+            }
+            else
+            {
+                ROS_ERROR_STREAM("无效的kp参数!");
+            }
+            temp=shortConverter(ki);
+            if (temp != nullptr)
+            {
+                memcpy(serialData + 11 * sizeof(uint8_t), temp, sizeof(ushort));
+            }
+            else
+            {
+                ROS_ERROR_STREAM("无效的ki参数!");
+            }
+            serialData[13] = checkSum(serialData, 13);
+
+            serialData[14] = 0x7D;
             delete temp;
             return serialData;
         }
@@ -494,10 +522,28 @@ uint8_t *ZbotSerial::twistToSerial()
 香橙派解析zbot3 底盘发送的传感器数据相关函数实现
 
 ```c++
-void ZbotSerial::decodeSerial(uint8_t *data)
+    void ZbotSerial::decodeSerial(uint8_t *data)
     {
         // decode serial data
-        status->stopFlag = data[1] ? true : false; //保留
+        switch(data[1]){
+            case 0:
+                status->emergency=0;
+                status->controlMode=AUTO_MODE;
+                break;
+            case 1 :
+                status->emergency=0;
+                status->controlMode=MANUAL_MODE;
+                break;
+            case 2:
+                status->emergency=1;
+                status->controlMode=AUTO_MODE;
+                break;
+            case 3:
+                status->emergency=1;
+                status->controlMode=MANUAL_MODE;
+                break;
+                    
+        }
         status->velocity.x = shortToFloat(&data[2]) / 1000;
         status->velocity.y = shortToFloat(&data[4]) / 1000;
         status->velocity.z = shortToFloat(&data[6]) / 1000;
@@ -511,6 +557,11 @@ void ZbotSerial::decodeSerial(uint8_t *data)
         status->angular.z = shortToFloat(&data[18]) * GYROSCOPE_RATIO;
         // battery
         status->battery = shortToFloat(&data[20]) / 1000.0;
+
+        int kp_rec=int(shortToFloat(&data[22]));
+        int ki_rec=int(shortToFloat(&data[24]));
+        //ROS_INFO_STREAM("zbot3_drive Emergency:"<<status->emergency);
+
     }
 
 ```
