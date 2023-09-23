@@ -646,7 +646,8 @@ rosservice call /kata/go_home
 
 ### 查看kata机器人urdf模型
 
-带kata六轴机器人款zbot在运行“kata_driver_ros.launch” 启动文件时，会一并启动**kata_state_publisher**和**kata_joint_publisher**节点。发布kata机器人模型信息和轴关节TF变换信息。可以在RVIZ中查看kata机器人模型与实体kata机器人联动。如下图所示。
+带kata六轴机器人款zbot在运行“kata_driver_ros.launch” 启动文件时，会一并启动**kata_state_publisher**和**kata_joint_publisher**节点。发布kata机器人模型信息和轴关节TF变换信息。可以在RVIZ中查看kata机器人模型与实体kata机器人联动。如下图所示。在运动zbot3 bringup 启动文件后，运行
+kata机器人启动文件**kata_driver_ros.launch**，等待kata机器人复位成功。打开rviz,添加两个RobotModel插件。将其中一个
 ![KATA URDF](./pics/153.png)
 
 ## 7. <a name='ROS'></a>ROS 基础工具与指令
