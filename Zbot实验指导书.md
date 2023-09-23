@@ -595,13 +595,6 @@ uint8_t *ZbotSerial::twistToSerial()
 * /kata_cam/start_capture  :usb相机开始捕获
 * /kata_cam/stop_capture   ：usb相机停止捕获
 
-需要说明的是，开塔机器人末端吸盘驱动气泵由驱动板控制，所以气泵的控制服务在zbot地盘驱动节点上。控制吸盘气泵的开启与关闭，需要启动zbot底盘驱动服务
-
-```bash
-    roslaunch zbot3_drive zbot3_bringup.launch
-```
-
-现在，你可以通过**rosservice list** 指令查看到关于气泵的控制服务**/kata/pump_control**
 
 现在简单介绍一下如何通过service服务方式控制开塔机器人。
 
@@ -650,6 +643,11 @@ rosservice call /kata/go_home
 
 有关开塔机器人的官方使用手册，参考如下:
 [开塔机器人用户手册](https://ojrjw1627z.k.topthink.com/@1epkq57pdv/1Mirobotkuaisurumenzhinan.html)
+
+### 查看kata机器人urdf模型
+
+带kata六轴机器人款zbot在运行“kata_driver_ros.launch” 启动文件时，会一并启动**kata_state_publisher**和**kata_joint_publisher**节点。发布kata机器人模型信息和轴关节TF变换信息。可以在RVIZ中查看kata机器人模型与实体kata机器人联动。如下图所示。
+![KATA URDF](./pics/153.png)
 
 ## 7. <a name='ROS'></a>ROS 基础工具与指令
 
