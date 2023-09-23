@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/4.0.0/github-markdown.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/highlightjs/cdn-release/build/styles/default.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex/dist/katex.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/markdown-it-texmath/css/texmath.min.css">
+<link rel="stylesheet" href="file:///c:\Users\cheny\.vscode\extensions\goessner.mdmath-2.7.4\themes\default\style.css">
+
+</head>
+<body class="markdown-body">
+<h1 dir="auto" id="zbot-qt-ui-%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B">Zbot-Qt-Ui 使用教程</h1>
+<h2 dir="auto" id="zbot-qt-ui%E7%AE%80%E4%BB%8B">zbot-qt-ui简介</h2>
+<p dir="auto">zbot-qt-ui是一个专为zbot系列机器人开发的ROS功能界面交互程序。可以在简单配置后实现管理zbot ROS功能,启动快捷工具，查看相关信息，语音控制等功能。支持远端控制。目前相关功能仍在不断维护和完善中。<strong>zbot-qt-ui 因文件目录结构的问题，当前不支持 roslaunch rosrun 的方式启动。</strong> 该软件当前支持打包后作为一个普通应用程序启动。</p>
+<h2 dir="auto" id="zbot-%E7%95%8C%E9%9D%A2%E9%A2%84%E8%A7%88">zbot 界面预览</h2>
+<p dir="auto">下图所示为zbot-qt-ui程序总体界面。整个程序界面可分为三个区域：菜单区和菜单主页区。菜单区用于在菜单项之间导航。点击对应的菜单按钮，菜单主页即可显示对应的菜单页面。同时，当前菜单项会以蓝色突出显示。状态栏区用于输出一些状态提示信息。如图示在状态栏右侧区域，会显示和ROS主机的连接状态，当前软件版本号。在菜单栏区域，有 “ROS配置、功能、话题、服务、节点、面板、设置”7项菜单项。软件启动后，默认选中和显示ROS配置菜单项，下面会逐个介绍各菜单项内容和功能。</p>
+<p dir="auto"><img src="./pics/35.png" alt="zbot_ui程序展示" data-src="./pics/35.png"></p>
+<h3 dir="auto" id="ros%E9%85%8D%E7%BD%AE%E7%95%8C%E9%9D%A2%E8%AF%B4%E6%98%8E">ROS配置界面说明</h3>
+<p dir="auto"><img src="./pics/36.png" alt="ROS 配置界面" data-src="./pics/36.png"></p>
+<p dir="auto">ROS配置界面如图所示：</p>
+<ul dir="auto">
+<li dir="auto">
+<p dir="auto">本机IP 显示当前该程序所在设备的ROS ip地址。即设置ROS环境变量 <strong>ROS_IP</strong>。该值会在程序每次启动后自动检测无线显卡的ip地址设定。</p>
+</li>
+<li dir="auto">
+<p dir="auto">主机路由  显示设定的ROS 主节点管理器 ROSMaster的uri中的ip地址。如改值为192.168.1.105,等同于设置ROS环境变量 ROS_MASTER_URI 中的ip地址</p>
+</li>
+<li dir="auto">
+<p dir="auto">模型 显示当前机器人具体模型号。</p>
+<p dir="auto"><em>以上三个变量值在改动后会实时生效。后续所有的设置项和变量值均会在改动后实时生效，用户无需手动保存，请谨慎改动</em></p>
+</li>
+</ul>
+<p dir="auto">两个复选框功能如下： 选中系统变量，则在运行ROS节点和shell指令时会首先同步用户空间下的系统环境变量。该步骤通过执行source ~/.bashrc 实现。不选中则跳过此步，直接运行对应对应功能指令。选中开机自启，设置软件开机自启。否则，取消软件开机自动运行。</p>
+<p dir="auto">底部三个按钮分别为在线运行按钮，麦克风按钮，ros节点停止功能按钮。点击在线按钮，该机运行roscore，启动主节点管理器，点击麦克风按钮，进行语音指令识别。
+点击停止按钮，杀死所有本地和远程已启动的ros节点。</p>
+<h3 dir="auto" id="%E5%8A%9F%E8%83%BD%E8%8F%9C%E5%8D%95%E9%A1%B5%E4%BB%8B%E7%BB%8D">功能菜单页介绍</h3>
+<p dir="auto"><img src="./pics/37.png" alt="zbot ui 功能界面" data-src="./pics/37.png"></p>
+<p dir="auto">快捷功能按钮区各功能按钮方便用户快速打开一些快捷功能，提升操作方便性。</p>
+<ul dir="auto">
+<li dir="auto">保存地图 方便用户在创建地图时快速保存ROS slam建图到默认位置。（默认保存文件在 zbot3_drive包下的/maps目录default.yaml）</li>
+<li dir="auto">开塔面板 开启zbot机器人携带的开塔六轴机器人手动控制面板。</li>
+<li dir="auto">图片查看 启动ros rqt_image_view图像话题查看工具</li>
+<li dir="auto">转换树 启动ros rqt_tf_tree 坐标转换查看工具</li>
+<li dir="auto">节点图 启动ros rqt_graph 节点关系查看工具</li>
+<li dir="auto">rviz 启动rviz。</li>
+</ul>
+<p dir="auto">运动控制组件由控制zbot机器人移动的方向按钮，可实现远程控制。其发布的话题为标准的geometry_msg/Twist类型话题，话题名称为cmd_vel.</p>
+<p dir="auto">快捷功能区下方的下拉框选择用户设定的ROS节点，即启动对应配置好的ROS launch文件。点击启动运行对应功能的launch文件。勾选远程，则改次启动为在远端运行ros主节点的机器上启动。适用于当前zbot-qt-ui程序没运行在zbot机器人上，但以多机通信的方式启动的状况。</p>
+<p dir="auto">下半区域为ROS 日志显示区域。该区域显示ros输出的各级别日志。（注：不通过ros 日志显示的程序输出信息无法再次查看。）可通过右侧下面框选则日志过滤级别。左上角两个按钮分别为清楚当前日志显示和将当前显示日志保存到本地文件的功能。</p>
+
+</body>
+</html>
