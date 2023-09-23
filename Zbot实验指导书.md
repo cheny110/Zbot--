@@ -10,9 +10,14 @@ Zbot3支持ssh远程登录后进行开发，如果大家不习惯远程命令行
 
 操作环境及软硬件配置如下：
 
-* Zbot3机器人
-PC：Windows/Linux  + VSCode
+- Zbot3机器人
+- PC：Windows/Linux  + VSCode
 
+
+实验目的 ：
+1. 能够完成ROS开发环境基础配置
+
+步骤
 1. 安装VSCode
 
     VSCode官方提供多种操作系统下的安装包，大家可以根据自己使用的操作系统选择下载:
@@ -46,7 +51,7 @@ PC：Windows/Linux  + VSCode
 
 ### 1.2. <a name='VNC'></a>VNC远程桌面工具
 
-当我们使用自己的PC远程连接Zbot3 机器人时，有时候仅靠终端会显得非常不变。因为终端无法为我们提供图形化的显示界面。我们所运行的程序凡是有UI界面的都无法完全借助终端远程运行。此时，一款合适的远程桌面工具就会非常有用。VNCViewer 是一款通用远程桌面协议显示软件。不同于向日葵和toDesk，我们不受会员约束，使用方便。其同样支持多种操作平台和操作系统
+当我们使用自己的PC远程连接Zbot3 机器人时，有时候仅靠终端会显得非常不变。因为终端无法为我们提供图形化的显示界面。我们所运行的程序凡是有UI界面的都无法完全借助终端远程运行。此时，一款合适的远程桌面工具就会非常有用。VNCViewer 是一款通用远程桌面协议显示软件。不同于向日葵和toDesk，VNC不受会员约束，使用方便。其同样支持多种操作平台和操作系统
 [RealVncViewer 下载地址]<https://www.realvnc.com/en/connect/download/viewer/>
 请选择适合自己的系统版本下载和安装。
 
@@ -109,7 +114,7 @@ Zbot机器人上电开关位于Zbot尾部显示屏下方。Zbot系统默认上�
 
 ![Zbot 开关部分](./pics/92.png)
 
-在PC端通过SSH连接OriginBot
+在PC端通过SSH连接Zbot3
 
 ```bash
 ssh orangepi@192.168.1.105
@@ -117,7 +122,7 @@ ssh orangepi@192.168.1.105
 
 ![Zbot ssh 建立连接](./pics/93.png)
 
-连接成功后，OriginBot机器人启动的命令为：
+连接成功后，Zbot3机器人启动的命令为：
 
 ```bash
 roslaunch zbot3_drive zbot3_bringup.launch disableEkf:=false
@@ -235,7 +240,7 @@ rosrun rqt_image_view rqt_image_View
 
 ### 2.6. <a name='-1'></a> 机器人充电方法
 
-控制器程序中加入了电池保护，电压低于9.8V时蜂鸣器会常响报警，此时就需要尽快充电了。**请使用OriginBot套件中自带的充电器进行充电。**
+控制器程序中加入了电池保护，电压低于9.8V时蜂鸣器会常响报警，此时就需要尽快充电了。**请使用zbot3套件中自带的充电器进行充电。**
 * 确定机器人电源开关处于“OFF”状态；
 
 * 将充电器DC口插到控制器的充电口上；
@@ -261,7 +266,7 @@ orangepi：Ubuntu (20.04) + ROS (Noetic)
 
 ![Zbot ssh 建立连接](./pics/93.png)
 
-连接成功后，OriginBot机器人启动的命令为：
+连接成功后，zbot3机器人启动的命令为：
 
 ```bash
 roslaunch zbot3_drive zbot3_bringup.launch
