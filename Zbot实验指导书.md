@@ -1609,11 +1609,31 @@ Zbot3的语音控制功能集成在Zbot Moitor 程序上。参考上面Zbot Moni
 
 Zbot3（双目版）带有双目视觉设备，除了具有Zbot3基础版的功能，还能基于双目视觉进行建图、避障、手势识别控制及其他视觉拓展功能。   
 
-双目相机通过串口与主控板相连，驱动实现节点为：
+双目相机通过串口与主控板相连，手势控制驱动实现顺序如下（唤醒底盘驱动、打开相机、打开手势控制节点）：
+```bash
+    roslaunch zbot3_drive zbot3_bringup.launch
+    roslaunch zbot3_vslam camera.launch 
+    roslaunch zbot_gesture zbot_gesture_control.launch
+```
 
 
-支持的手势一共有七种。分别是:
+支持的手势一共有七种，如下图。    
+  ![手势-胜利](./pics/156.png)    
+  该图手势示意小车前进    
 
+  ![手势-五指并拢伸直](./pics/157.png)    
+  该图手势示意小车停下       
+
+  ![手势-握紧拳头](./pics/158.png)    
+  该图手势示意小车后退    
+
+  ![手势-左手握拳竖大拇指](./pics/160.png) ![手势-右手握拳竖大拇指](./pics/159.png)    
+  上两图分别示意原地顺时针旋转和原地逆时针旋转    
+
+  ![手势_右手love](./pics/161.png)![手势_左手love](./pics/162.png)    
+  上两图分别表示向右转弯和向左转弯    
+
+以下代码为相关源码中的手势判断逻辑。
 
 ```python
 def alterState(self,gesture:HandGesture):
@@ -1634,5 +1654,7 @@ def alterState(self,gesture:HandGesture):
             self.turnRight()
         else:               #默认检测不到姿势停止
             self.stop()
-
-```
+``` 
+    
+- 完成所有节点启动后，开始进行实验，注意双目相机的仰角，保持手势与小车的合适距离，使得手势在相机视野中出现并具有合适大小。
+- 根据场地给出合适的手势，控制小车移动，完成实验。
