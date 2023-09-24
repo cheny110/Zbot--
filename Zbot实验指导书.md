@@ -1547,10 +1547,44 @@ Zbot3的语音控制功能集成在Zbot Moitor 程序上。参考上面Zbot Moni
 
 
 ## 15. <a name='-1'></a>Zbot手势控制    
-- 实验硬件：
+-实验硬件：
 
     Zbot3（双目版）    
     带有SSH和VNC的个人电脑
     
-- 实验目的：
-    
+-实验目的：   
+
+    1.了解机器视觉和双目视觉的应用    
+    2.了解手势识别的原理和应用方法    
+    3.了解手势控制Zbot3机器人的节点发布方法    
+    4.了解Zbot3（双目版）基于双目视觉二次开发功能拓展的方法
+
+Zbot3（双目版）带有双目视觉设备，除了具有Zbot3基础版的功能，还能基于双目视觉进行建图、避障、手势识别控制及其他视觉拓展功能。   
+
+双目相机通过串口与主控板相连，驱动实现节点为：
+
+
+支持的手势一共有七种。分别是:
+
+
+```python
+def alterState(self,gesture:HandGesture):
+        rospy.loginfo(gesture.pose)
+        if gesture.pose == GestureControl.VICTORY:
+            self.moveForward()
+        elif gesture.pose ==GestureControl.OPEN_PALM:
+            self.stop()
+        elif gesture.pose ==GestureControl.CLOSED_FIST:
+            self.retrieve()
+        elif gesture.pose==GestureControl.THUMB_UP and gesture.hand ==GestureControl.LEFT:
+            self.rotateClockWise()
+        elif gesture.pose==GestureControl.THUMB_UP and gesture.hand ==GestureControl.RIGHT:
+            self.rotateCounterClockWise()
+        elif gesture.pose==GestureControl.LOVE and gesture.hand ==GestureControl.LEFT:
+            self.turnLeft()
+        elif gesture.pose==GestureControl.LOVE and gesture.hand ==GestureControl.RIGHT:
+            self.turnRight()
+        else:               #默认检测不到姿势停止
+            self.stop()
+
+```
