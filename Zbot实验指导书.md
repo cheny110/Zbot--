@@ -670,6 +670,54 @@ rosservice call /kata/go_home
 kata机器人启动文件**kata_driver_ros.launch**，等待kata机器人复位成功。打开rviz,添加两个RobotModel插件。将其中一个**Robot_Description** 改为**kata/robot_description**。此时，控制KATA实体机器人移动，KATA机器人模型也将跟随移动。
 ![KATA URDF](./pics/153.png)
 
+### ROS中的服务通信机制
+服务通信是ROS中一种极其常用的通信模式，服务通信是基于请求响应模式的，是一种应答机制。也即: 一个节点A向另一个节点B发送请求，B接收处理请求并产生响应结果返回给A。
+
+特点：**以请求响应的方式实现不同节点之间数据交互的通信模式。**
+作用：**用于偶然的、对时时性有要求、有一定逻辑处理需求的数据传输场景。**
+
+服务通信理论模型：
+    服务是一种带有应答的通信机制，与话题的通信相比，其减少了Listener与Talker之间的RPC通信。
+服务通信较之于话题通信更简单些，理论模型如下图所示，该模型中涉及到三个角色:
+
+- ROS master(管理者)
+- Server(服务端)
+- Client(客户端)
+ROS Master 负责保管 Server 和 Client 注册的信息，并匹配话题相同的 Server 与 Client ，帮助 Server 与 Client 建立连接，连接建立后，Client 发送请求信息，Server 返回响应信息。
+![ROS服务通信模型](./pics/155.png)
+服务通信建立流程如下：
+1.Talker注册
+Talker启动，通过1234端口使用RPC向ROS Master注册发布者的信息，包含所提供的服务名;ROS Master会将节点的注册信息加入注册列表中。
+2.Listener注册
+Listener启动，同样通过RPC向ROS Master注册订阅者的信息，包含需要订阅的服务名。
+3.ROS Master进行信息匹配
+Master根据Listener的订阅信息从注册列表中进行查找，如果没有找到匹配的服务提供者，则等待该服务的提供者加入：如果找到匹配的服务提供者信息，则通过RPC向Listener发送Talker的TCP地址信息。
+4.Listener与Talker建立网络连接
+Listener接收到确认信息后，使用TCP尝试与Talker建立网络连接，并且发送服务的请求数据。
+5.Talker向Listener发布服务应答数据
+Talker接收到服务请求和参数后，开始执行服务功能，执行完成后，向Listener发送应答数据。
+
+服务通信自定义srv: srv为服务通信数据类型文件。指定了该服务中应传输的数据类型。如下以KATA机器人的位姿控制服务文件为例子。
+```plain
+#PoseControl.srv
+float64 x
+float64 y
+float64 z
+float64 roll
+float64 pitch
+float64 yaw
+string moveMethod
+float32 speed
+bool relative
+---
+bool res
+```
+
+x~yaw 描述KATA机器人位姿控制服务请求所需要的基本的空间描述参数，类型为64位浮点型。moveMethod指定了机器人运动方式，类型为字符串。
+relative指定了以上坐标是否使用相对移动，类型为布尔型。res为服务请求的返回结果。请求参数与返回结果间用“---”隔开。
+
+
+
 ### URDF 简介
 URDF全称为Unified Robot Description Format，中文可以翻译为“统一机器人描述格式”。与计算机文件中的.txt文本格式、.jpg图像格式等类似，URDF是一种基于XML规范、用于描述机器人结构的格式。根据该格式的设计者所言，设计这一格式的目的在于提供一种尽可能通用的机器人描述规范。从机构学角度讲，机器人通常被建模为由连杆和关节组成的结构。连杆是带有质量属性的刚体，而关节是连接、限制两个刚体相对运动的结构。关节也被成为运动副。通过关节将连杆依次连接起来，就构成了一个个运动链（也就是这里所定义的机器人模型）。一个URDF文档即描述了这样的一系列关节与连杆的相对关系、惯性属性、几何特点和碰撞模型。具体来
 - 机器人模型的运动学与动力学描述
