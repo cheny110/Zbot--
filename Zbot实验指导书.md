@@ -2,9 +2,9 @@
 # Zbot 实验指导书
 
 
-## 1. <a name=''></a>搭建开发环境
+## 搭建开发环境
 
-### 1.1. <a name='VSCode'></a>VS Code 开发环境
+### VS Code 开发环境
 
 Zbot3支持ssh远程登录后进行开发，如果大家不习惯远程命令行开发的话，也可以在PC端搭建一个可视化的开发环境，这里我们介绍如何使用VSCode进行远程开发。
 
@@ -49,7 +49,7 @@ Zbot3支持ssh远程登录后进行开发，如果大家不习惯远程命令行
 
 这样，我们就可以远程访问Zbot3上的代码啦，还可以随时修改，会实时同步到机器人端。此外，我们还可以在连接成功的VSCode中，启动多个终端，便于我们输入各种在Zbot3上运行的命令。
 
-### 1.2. <a name='VNC'></a>VNC远程桌面工具
+### VNC远程桌面工具
 
 当我们使用自己的PC远程连接Zbot3 机器人时，有时候仅靠终端会显得非常不变。因为终端无法为我们提供图形化的显示界面。我们所运行的程序凡是有UI界面的都无法完全借助终端远程运行。此时，一款合适的远程桌面工具就会非常有用。VNCViewer 是一款通用远程桌面协议显示软件。不同于向日葵和toDesk，VNC不受会员约束，使用方便。其同样支持多种操作平台和操作系统
 [RealVncViewer 下载地址]<https://www.realvnc.com/en/connect/download/viewer/>
@@ -106,9 +106,9 @@ Zbot3支持ssh远程登录后进行开发，如果大家不习惯远程命令行
 
 ![Alt text](./pics/118.png)
 
-## 2. <a name='-1'></a>机器人启动与参数配置
+## 机器人启动与参数配置
 
-### 2.1. <a name='Zbot3'></a>启动Zbot3 底盘
+### 启动Zbot3 底盘
 
 - 硬件需求
 
@@ -144,7 +144,7 @@ roslaunch zbot3_drive zbot3_bringup.launch disableEkf:=false
 
 zbot3_bringup.launch 文件为zbot3 小车的唤起文件。该启动文件唤起zbot3小车基本控制功能。该文件根据**disableEkf**参数选择是否启动robot_pose_ekf 功能节点。
 
-### 2.2. <a name='EKF'></a>EKF简介
+### EKF简介
 
 EKF全称ExtendedKalmanFilter，即扩展卡尔曼滤波器，是一种高效率的递归滤波器(自回归滤波器)。
 
@@ -199,7 +199,7 @@ ROS中可以利用这种方式根据来自不同来源的（部分）姿态测�
 ![急停按钮](./pics/152.png)
 
 
-### 2.3. <a name='-1'></a>启动雷达
+### 启动雷达
 
 ```bash
 roslaunch lsn10_lidar lsn10.launch scan_topic:=/scan
@@ -218,7 +218,7 @@ roslaunch lsn10_lidar lsn10.launch scan_topic:=/scan
 
 ![查看雷达数据](./pics/95.png)
 
-### 2.4. <a name='-1'></a>启动相机
+### 启动相机
 
 ```bash
 roslaunch lsn10_lidar lsn10.launch scan_topic:=/scan
@@ -238,7 +238,7 @@ rosrun rqt_image_view rqt_image_View
 ![查看rgb 彩色图像](./pics/96.png)
 ![查看rgb 深度图像](./pics/97.png)
 
-### 2.5. <a name='IMU'></a>查看IMU话题信息
+### 查看IMU话题信息
 
 安装rviz-imu可视化插件
 
@@ -252,7 +252,7 @@ rosrun rqt_image_view rqt_image_View
     roslaunch zbot3_drive zbot3_bringup.launch
 ```
 
-### 2.6. <a name='-1'></a> 机器人充电方法
+### 机器人充电方法
 
 控制器程序中加入了电池保护，电压低于9.8V时蜂鸣器会常响报警，此时就需要尽快充电了。**请使用zbot3套件中自带的充电器进行充电。**
 * 确定机器人电源开关处于“OFF”状态；
@@ -267,7 +267,7 @@ rosrun rqt_image_view rqt_image_View
 即可看到可视化的IMU信息，此时摇动机器人，Rviz中的坐标系也会跟随运动。
 ![查看imu](./pics/113.png)
 
-## 3. <a name='-1'></a>机器人遥控与可视化
+## 机器人遥控与可视化
 
 操作环境及软硬件配置如下：
 
@@ -276,7 +276,7 @@ orangepi：Ubuntu (20.04) + ROS (Noetic)
 键盘
 手柄（可选）
 
-### 3.1. <a name='-1'></a>键盘遥控
+### 键盘遥控
 
 ![Zbot ssh 建立连接](./pics/93.png)
 
@@ -313,7 +313,7 @@ rosrun teleop_twist_keyboard teleop_twist_keyboard.py #机器键盘控制节点
 
 切换为全向轮控制： CapLock /Shift(保持按住)
 
-### 3.2. <a name='-1'></a>手柄遥控
+### 手柄遥控
 
 * 有线手柄；将手柄的usb接口插入Zbot3上香橙派派的USB接口
 * 无线手柄；将手柄的无线接收器插入Zbot3香橙派派USB接口
@@ -350,9 +350,9 @@ roslaunch teleop_twist_joy teleop.launch
 此处PC端如果使用虚拟机运行Ubuntu系统，为确保机器人与Ubuntu系统处于同一局域网中，需要将虚拟机的网络设置为桥接模式：
 ![设置网络桥接](./pics/102.png)
 
-### 3.3. <a name='App'></a>手机App 遥控
+### 手机App 遥控
 
-#### 3.3.1. <a name='APP'></a>APP蓝牙连接
+#### APP蓝牙连接
 
 如下图，先点击搜索设备搜索当前区域的蓝牙，
 ![蓝牙连接面板](./pics/81.png)
@@ -360,7 +360,7 @@ roslaunch teleop_twist_joy teleop.launch
 Zbot机器人使用的蓝牙模块为BT04系列。点击即可完成连接。
 ![连接蓝牙](./pics/82.png)
 
-#### 3.3.2. <a name='APP-1'></a>APP 遥控方式简介
+#### APP 遥控方式简介
 
 APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定方向移动。
 在遥控区域上方，可切换遥控方式和增减小车控制速度。如下图切换为按键控制方式。
@@ -386,7 +386,7 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 
 ![改变重力灵敏度](./pics/89.png)
 
-## 4. <a name='PID'></a>PID 调参
+## PID 调参
 
 在APP导航栏选择调试选项卡即可进入参数调试界面。如下图所示。
 
@@ -400,9 +400,9 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 
 在导航栏，选择波形界面，即可查看驱动底盘发送对应数据的变化波形。有关该部分设置需在zbot驱动板程序中自行设置。
 
-## 5. <a name='-1'></a>控制器通信协议说明
+## 控制器通信协议说明
 
-### 5.1. <a name='-'></a>香橙派->驱动板控制协议
+### 香橙派->驱动板控制协议
 
 | 数据位 | 含义       | 默认值  |  说明                    |
 |:---:|:--------:|:----:|:----------------------:|
@@ -416,7 +416,7 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 |     |          |      |                        |
 |     |          |      |                        |
 
-### 5.2. <a name='--1'></a>驱动板->香橙派数据协议
+### 驱动板->香橙派数据协议
 
 | 数据位   | 含义      | 默认值  |  说明                     |
 |:-----:|:-------:|:----:|:-----------------------:|
@@ -566,7 +566,7 @@ uint8_t *ZbotSerial::twistToSerial()
 
 ```
 
-## 6. <a name='-1'></a>开塔机器人操作实验
+## 开塔机器人操作实验
 
 - 实验硬件：
 
@@ -1003,7 +1003,7 @@ ROS中[robot_state_publisher](http://wiki.ros.org/robot_state_publisher) 和 [ro
 ![KATA TF变换](./pics/154.png)
 
 
-## 7. <a name='ROS'></a>ROS 基础工具与指令
+## ROS 基础工具与指令
 
 1.**rosnode** -ROS节点管理工具
 
@@ -1202,7 +1202,7 @@ rosrun rqt_tf_tree rqt_tf_tree
 rosrun rqt_image_view rqt_image_view
 ```
 
-## 8. <a name='launch'></a>理解launch文件
+## 理解launch文件
 
 前面我们提到过可以通过roslaunch指令可以一次启动多个节点，现在，我们尝试通过roslaunch运行上述用键盘控制zbot3运动的功能。
 
@@ -1240,7 +1240,7 @@ roslaunch zbot3_drive zbot3_keycontrol.launch
 * [roslaunch](http://wiki.ros.org/roslaunch/Commandline%20Tools)
 * [launch文件格式](http://wiki.ros.org/roslaunch/XML)
 
-### 8.1. <a name='TF'></a>机器人TF坐标变换解析
+### 机器人TF坐标变换解析
 
 机器人系统通常具有随时间变化的许多 3D 坐标系，例如世界坐标系，基础
 坐标系等。tf 随时间跟踪所有这些框架，是处理机器人不同坐标系的一个包，
@@ -1254,9 +1254,9 @@ roslaunch zbot3_drive zbot3_keycontrol.launch
 如图为zbot小车完整的TF树图
 ![Slam 建图时的TF树](./pics/121.png)
 
-## 9. <a name='Slam'></a>Slam 建图实验
+## Slam 建图实验
 
-### 9.1. <a name='SLAM'></a>SLAM建图算法
+### SLAM建图算法
 
 操作环境及软硬件配置如下：
 
@@ -1377,7 +1377,7 @@ roslaunch zbot3_drive zbot3_slam.launch
 用键盘控制小车，使他建图完周围场景。
 ![Gmapping 建完场景](./pics/120.png)
 
-### 9.2. <a name='Gmapping'></a>Gmapping 配置文件一览
+### Gmapping 配置文件一览
 
 针对每种不同的SLAM建图方法，都有对应的配置文件。合理的参数配置能提高建图效果。现在，以Gmapping建图方法为例，我们查看其配置文件。在 **zbot3_slam**包中，打开slam_gmapping.launch, 在gmapping 节点下，我们可以看到具体配置内容。
 以下作简单说明：
@@ -1400,7 +1400,7 @@ roslaunch zbot3_drive zbot3_slam.launch
 
 有关gmapping更详细的配置说明，参考：[gmapping roswiki](http://wiki.ros.org/gmapping#External_Documentation)
 
-### 9.3. <a name='-1'></a>保存地图
+### 保存地图
 
 ```bash
 roslaunch zbot3_drive zbot3_savemap.launch
@@ -1414,7 +1414,7 @@ roslaunch zbot3_drive zbot3_savemap.launch
 如下图所以，地图文件实际上是一张图片文件。
 ![地图文件是一张图片文件](./pics/124.png)
 
-### 9.4. <a name='hector'></a>使用hector建图
+### 使用hector建图
 
 **zbot3_slam.launch** 启动文件可以指定 slamMethod 参数切换建图算法。如下使用hector建图方法
 
@@ -1424,7 +1424,7 @@ roslaunch zbot3_drive zbot3_savemap.launch
 
 ![Hector 建图](./pics/123.png)
 
-### 9.5. <a name='Cartograpger'></a>使用Cartograpger 建图
+### 使用Cartograpger 建图
 
 Cartographer是Google推出的一套基于图优化的激光SLAM算法，它同时支持2D和3D激光SLAM，可以跨平台使用，支持Laser、IMU、Odemetry、GPS等多种传感器配置。该算法可以实现实时定位和建图。Cartographer建立的栅格地图可以达到5cm的精度，该算法广泛应用于服务机器人、扫地机器人、仓储机器人、自动驾驶等领域，是最优秀的激光SLAM框架之一。
 
@@ -1456,7 +1456,7 @@ Cartographer ROS 作为Cartographer在ROS上的移植，其默认数据保存方
 roslaunch zbot3_drive zbot3_cartographer_savemap.launch
 ```
 
-## 10. <a name='Zbot3-1'></a>Zbot3 导航
+## Zbot3 导航
 
 实验硬件设备：
 
@@ -1485,7 +1485,7 @@ ros 导航栈结构如下图所示
 
 导航框架最终的输出是控制机器人的速度指令（geometry_msgs/Twist），这就要求机器人控制节点具备解析控制指令中线速度、角速度的能力，并且控制机器人完成相应的运动。
 
-### 10.1. <a name='movebase'></a>配置movebase
+### 配置movebase
 
  move_base 是一个开源 2D 移动机器人导航包，用于将机器人在指定的导航框架内运动到任务位置。 move_base 包执行一个完成给定导航任务的ROS行为，基于全局地图的路径规划是在机器人向下一个目的地出发前开始的，这个过程会考虑到已知的障碍物和被标记成“未知"的区域。要使机器人实际执行动作行为，本地路径规划器会监听传回来的传感器数据，并选择合适的线速度和角速度来让机器人完整地执行完全局路径规划上的当前段路径。
 
@@ -1511,7 +1511,7 @@ ros 导航栈结构如下图所示
  **给定导航目标**
  使用MoveBaseActionGoal消息类型来指定目标，目标由一个包含一个frame_id的ROS标准header、一个goal_id和一个PoseStamped消息类型的goal组成。其中，PoseStamped消息类型是由一个header和一个包含position和orintation的pose组成。
 
-### 10.2. <a name='amcl'></a>配置amcl
+### 配置amcl
 
 导航功能的顺利进行，离不开机器人的精准定位。自主定位即机器人在任意状态下都可以推算出自己在地图中所处的位置。ROS为开发者提供了一种自适蒙特卡罗定位方法（Adaptive Monte Carlo Localization，amcl），这是一种概率统计方法，针对已有地图使用粒子滤波器跟踪一个机器人的姿态。AMCL是一种基于蒙特卡罗方法的自适应定位算法，它可以在未知环境中实现机器人的精确定位。
 AMCL定位原理是通过机器人的传感器数据和地图信息，利用蒙特卡罗方法进行粒子滤波，从而得到机器人的位置和姿态。AMCL，定位原理的核心是粒子滤波算法。粒子滤波算法是一种基于蒙特卡罗方法的概率滤波算法，它通过一组粒子来表示机器人的状态，每个粒子都有一个权重，代表该粒子对机器人状态的估计贡献。在 AMCL 中，粒子的状态包括机器人的位置和姿态。
@@ -1536,7 +1536,7 @@ Bai文库
 
 给定初始位姿后，AMCL会在机器人周围随机撒一些粒子，随着机器人的运动，每个粒子也会实时跟随机器人的速度更新位姿，当粒子周边的环境状态与机器人差距较大时，就会被逐渐淘汰，反之，则会在机器人周边产生更多粒子。以此类推，粒子都集中在机器人所在位置可能性高的地方，也就是定位的结果。
 
-### 10.3. <a name='map_server'></a>使用map_server 加载地图
+### 使用map_server 加载地图
 
 导航时需要我们加载我们前面已经建图生成的地图文件，并将zbot3小车放到对应的现实场景中。加载地图文件可以用如下命令：
 
@@ -1544,7 +1544,7 @@ Bai文库
     rosrun map_server map_server -f /[path]/[map_name].yaml
 ```
 
-### 10.4. <a name='zbot3'></a>运行zbot3 导航
+### 运行zbot3 导航
 
 为了方便启动，zbot3的整个导航启动配置都写在了zbot3_drive 包 **zbot3_navigation.launch**文件中。经过前面的学习，相信现在你已经能够轻松的理解该文件的内容。我们直接运行即可。
 
@@ -1573,19 +1573,19 @@ Bai文库
 在左侧列表中选择对应项，右侧即可看到各种可配置参数。将鼠标放置在对应参数上稍作停留，会有关于该参数的说明。
 ![rqt 动态调参](./pics/32.png)
 
-### 10.5. <a name='-1'></a>实现多点往复导航
+### 实现多点往复导航
 
 rviz上有一系列工具，如下图。按照前面教程，通过位姿评估工具校正小车在地图上的初始位置。不同于单目标导航，这次我们用发布导航点工具（publish point）在地图上分开点击几个位置，然后右键点击，可以看到小车开始依次往点击的对应位置移动过去。
 
 ![RVIZ 工具](./pics/34.png)
 
-### 10.6. <a name='-1'></a>实现小车自主探索建图
+### 实现小车自主探索建图
 
 在ROS中，有多种自主探索建图算法。其核心思想都是通过订阅slam节点发布的地图数据或通过movebase发布的代价地图数据找出当前已建立地图的边界，并发送导航目标指引小车移动过去，在移动的过程中，激光雷达的扫描范围不断扩大，不断扩大建图范围，并查找新的边界，直到指定区域扫描完毕或整个场景地图实现闭合。
 
 在noetic中，最方便配置的是**explore_lite**, Explore-lite使用了一种名为模式自适应增量搜索（PAISS）的算法。它在行动选择方面和传统的探索-开发方法有所不同，并且具有快速学习特性。PAISS算法使用一种模式自适应的搜索方法，该搜索方法根据不同的环境条件选择最佳行动。它通过实时分析当前任务和环境因素来优化行动，并且可以快速学习新的要求，而无需重新训练。AISS算法的搜索过程可分为三个步骤：1：行动选择步骤，此步骤通过实时分析当前任务和环境因素来优化行动。2：根据优化后的行动执行步骤。3：将当前边界点保存至数据库中。PAISS算法和激光雷达可以将机器人自动导航到目标地点。此过程可以概括为。1：机器人使用激光雷达来采集信息。2：机器人使用PAISS算法根据当前任务和环境因素来优化行动并执行到下一个边界点。3：重复上述步骤直到机器人达到预定的目的地。
 
-#### 10.6.1. <a name='explore_lite'></a>启动explore_lite
+#### 启动explore_lite
 
 选择一块相对宽敞的区域空间，将小车放置在没有障碍物包围的位置。确保场景中的障碍物高度能有效被激光雷达探测到，如下启动explore_lite.
 
@@ -1597,7 +1597,7 @@ rviz上有一系列工具，如下图。按照前面教程，通过位姿评估�
 
 ![explore_lite 建图](./pics/69.png)
 
-#### 10.6.2. <a name='RRT-Exploration'></a>使用RRT-Exploration建图
+#### 使用RRT-Exploration建图
 
 除了explore——lite自主探索建图方法还，还有常用RRT-Exploration 自主探索建图。rrt_exploration”是实现移动机器人的多机器人地图探索算法的ROS包。 它是基于快速探索随机树（RRT）算法。 它使用占用网格作为地图表示。该包具有5个不同的ROS节点：
 
@@ -1641,14 +1641,14 @@ rrt-exploration 框架如图所示
     roslaunch zbot3_drive zbot3_rrt_exploration.launch
 ```
 
-## 11. <a name='Zbot3SLAM'></a>Zbot3 视觉SLAM建图
+## Zbot3 视觉SLAM建图
 
 Zbot 机器人视觉建图依赖于奥比中光双目视觉相机。该相机ROS节点发布彩图图像话题信息和深度图像话题信息，结合使用可以获取图像素点的颜色和深度信息。
 
 视觉SLAM建图使用ROS中的Rtabmap ROS包完成建图。该功能包同样包含一系列复杂的参数配置。具体参数配置和详细使用方法可参考：
 [Rtabmap ROS](http://wiki.ros.org/rtabmap_ros)
 
-### 11.1. <a name='Zbot3Slam'></a>运行Zbot3 视觉Slam建图
+### 运行Zbot3 视觉Slam建图
 
 ```bash
     roslaunch zbot3_drive zbot3_slam3d.launch
@@ -1672,7 +1672,7 @@ roslaunch zbot3_drive zbot3_slam3d.launch autoSlam:=true
     roslaunch zbot3_drive zbot3_slam3d.launch useLidar:=true
 ```
 
-### 11.2. <a name='RtabmapRos'></a>使用Rtabmap Ros 进行导航
+###使用Rtabmap Ros 进行导航
 
 在进行完视觉Slam 建图后，我们就可以用新建的地图进行导航了。Rtabmap ROS包不仅能够生成3d 点云图，还能够根据生成的3d点云数据提供定位，由此实现导航功能。 遗憾的是zbot小车只能在二维平面运动。但我们仍可以简单导航实验。
 
@@ -1683,7 +1683,7 @@ roslaunch zbot3_drive zbot3_navigation3d.launch
 
 该launch 文件同视觉Slam 卵巢文件没有区别，仅是把movebase 功能包加入进去,再借助locallization 参数确保Rtabmap 功能包再启动时不会清除上一次保存的3d点云数据文件。
 
-## 12. <a name='Zbotfollow'></a>Zbot follow 功能包功能说明和使用
+## Zbot follow 功能包功能说明和使用
 
 Zbot follow 功能包里面包含了一些zbot 跟随功能的节点实现。如下一一介绍。
 
@@ -1728,7 +1728,7 @@ roslaunch zbot_follow zbot3_object_follow.launch
 
 !
 
-## 13. <a name='ZbotMonitor'></a>Zbot Monitor 使用说明
+## Zbot Monitor 使用说明
 
 Zbot Monitor 是基于Qt写的Zbot 机器人用户界面交互程序。可方便用户快速打开基本功能。对Zbot机器人进行配置与状态监测。其主界面如下图所示：
 
@@ -1798,7 +1798,7 @@ Zbot通讯配置可以方便用户获取Zbot当前网络下的IP地址以及配�
     点击后打开软件设置页，顶部添加命令区域可以为功能页功能选择下拉框加入新功能配置。点击Test 测试按钮测试测试启动功能测试对应指令是否输入正确。点击添加按钮完成添加。删除命令下拉框则可以删除对应功能。讯飞语音API密匙需要填入从讯飞语音识别服务平台的API密码，方可支持语音指令功能。远端账号设置区域则可以设置多机通讯时主机端账号和密码，使功能运行在远端。
     日志保存位置则指定点击日志保存按钮时日志文件的默认保存位置。
 
-### 13.1. <a name='Zbot'></a>Zbot 语音控制
+### Zbot 语音控制
 
 功能介绍
 随着电子产品的日益发展，语音识别技术广泛出现在不同的场景中，例如智能家居、语音助手、电话客服和机器人导游等。而随着技术的不断发展，机器人的语音识别正在变得越来越准确和可靠，这进一步促进机器人在各种领域的应用。
@@ -1811,7 +1811,7 @@ Zbot3的语音控制功能集成在Zbot Moitor 程序上。参考上面Zbot Moni
 
 语音识别结果发布的话题在 **/zbot_monitor/voice_cmd** 上，用户可以方便的订阅该话题实现语音功能扩展。
 
-### 13.2. <a name='ZbotMonitor-1'></a>Zbot Monitor 开塔机器人面板
+### Zbot Monitor 开塔机器人面板
 
 操作环境及软硬件配置如下：
 
@@ -1832,7 +1832,7 @@ Zbot3的语音控制功能集成在Zbot Moitor 程序上。参考上面Zbot Moni
 
 右侧单步移动按钮可以控制机器人在各坐标上进行单步移动，移动步长为step 下拉框当前选择的步长。
 
-## 14. <a name='-1'></a>开塔机器人快速上手
+## 开塔机器人快速上手
 
 1. 指令说明
 
@@ -1902,7 +1902,7 @@ Zbot3的语音控制功能集成在Zbot Moitor 程序上。参考上面Zbot Moni
 
 
 
-## 15. <a name='-1'></a>Zbot手势控制    
+## Zbot手势控制    
 -实验硬件：
 
     Zbot3（双目版）    
@@ -1981,9 +1981,9 @@ def alterState(self,gesture:HandGesture):
 # Zbot 实验指导书
 
 
-## 1. <a name=''></a>搭建开发环境
+## 搭建开发环境
 
-### 1.1. <a name='VSCode'></a>VS Code 开发环境
+### VS Code 开发环境
 
 Zbot3支持ssh远程登录后进行开发，如果大家不习惯远程命令行开发的话，也可以在PC端搭建一个可视化的开发环境，这里我们介绍如何使用VSCode进行远程开发。
 
@@ -2028,7 +2028,7 @@ Zbot3支持ssh远程登录后进行开发，如果大家不习惯远程命令行
 
 这样，我们就可以远程访问Zbot3上的代码啦，还可以随时修改，会实时同步到机器人端。此外，我们还可以在连接成功的VSCode中，启动多个终端，便于我们输入各种在Zbot3上运行的命令。
 
-### 1.2. <a name='VNC'></a>VNC远程桌面工具
+### VNC远程桌面工具
 
 当我们使用自己的PC远程连接Zbot3 机器人时，有时候仅靠终端会显得非常不变。因为终端无法为我们提供图形化的显示界面。我们所运行的程序凡是有UI界面的都无法完全借助终端远程运行。此时，一款合适的远程桌面工具就会非常有用。VNCViewer 是一款通用远程桌面协议显示软件。不同于向日葵和toDesk，VNC不受会员约束，使用方便。其同样支持多种操作平台和操作系统
 [RealVncViewer 下载地址]<https://www.realvnc.com/en/connect/download/viewer/>
@@ -2085,9 +2085,9 @@ Zbot3支持ssh远程登录后进行开发，如果大家不习惯远程命令行
 
 ![Alt text](./pics/118.png)
 
-## 2. <a name='-1'></a>机器人启动与参数配置
+## 机器人启动与参数配置
 
-### 2.1. <a name='Zbot3'></a>启动Zbot3 底盘
+### 启动Zbot3 底盘
 
 硬件需求
 
@@ -2123,7 +2123,7 @@ roslaunch zbot3_drive zbot3_bringup.launch disableEkf:=false
 
 zbot3_bringup.launch 文件为zbot3 小车的唤起文件。该启动文件唤起zbot3小车基本控制功能。该文件根据**disableEkf**参数选择是否启动robot_pose_ekf 功能节点。
 
-### 2.2. <a name='EKF'></a>EKF简介
+### EKF简介
 
 EKF全称ExtendedKalmanFilter，即扩展卡尔曼滤波器，是一种高效率的递归滤波器(自回归滤波器)。
 
@@ -2178,7 +2178,7 @@ ROS中可以利用这种方式根据来自不同来源的（部分）姿态测�
 ![急停按钮](./pics/152.png)
 
 
-### 2.3. <a name='-1'></a>启动雷达
+### 启动雷达
 
 ```bash
 roslaunch lsn10_lidar lsn10.launch scan_topic:=/scan
@@ -2197,7 +2197,7 @@ roslaunch lsn10_lidar lsn10.launch scan_topic:=/scan
 
 ![查看雷达数据](./pics/95.png)
 
-### 2.4. <a name='-1'></a>启动相机
+### 启动相机
 
 ```bash
 roslaunch lsn10_lidar lsn10.launch scan_topic:=/scan
@@ -2217,7 +2217,7 @@ rosrun rqt_image_view rqt_image_View
 ![查看rgb 彩色图像](./pics/96.png)
 ![查看rgb 深度图像](./pics/97.png)
 
-### 2.5. <a name='IMU'></a>查看IMU话题信息
+### 查看IMU话题信息
 
 安装rviz-imu可视化插件
 
@@ -2231,7 +2231,7 @@ rosrun rqt_image_view rqt_image_View
     roslaunch zbot3_drive zbot3_bringup.launch
 ```
 
-### 2.6. <a name='-1'></a> 机器人充电方法
+### 机器人充电方法
 
 控制器程序中加入了电池保护，电压低于9.8V时蜂鸣器会常响报警，此时就需要尽快充电了。**请使用zbot3套件中自带的充电器进行充电。**
 * 确定机器人电源开关处于“OFF”状态；
@@ -2246,7 +2246,7 @@ rosrun rqt_image_view rqt_image_View
 即可看到可视化的IMU信息，此时摇动机器人，Rviz中的坐标系也会跟随运动。
 ![查看imu](./pics/113.png)
 
-## 3. <a name='-1'></a>机器人遥控与可视化
+## 机器人遥控与可视化
 
 软硬件需求：
   - Zbot3 机器人    
@@ -2258,7 +2258,7 @@ rosrun rqt_image_view rqt_image_View
  - 了解并熟悉机器人的遥控方式
  - 尝试多种方式进行机器人的遥控
 
-### 3.1. <a name='-1'></a>键盘遥控
+### 键盘遥控
 
 ![Zbot ssh 建立连接](./pics/93.png)
 
@@ -2295,7 +2295,7 @@ rosrun teleop_twist_keyboard teleop_twist_keyboard.py #机器键盘控制节点
 
 切换为全向轮控制： CapLock /Shift(保持按住)
 
-### 3.2. <a name='-1'></a>手柄遥控
+### 手柄遥控
 
 * 有线手柄；将手柄的usb接口插入Zbot3上香橙派派的USB接口
 * 无线手柄；将手柄的无线接收器插入Zbot3香橙派派USB接口
@@ -2332,9 +2332,9 @@ roslaunch teleop_twist_joy teleop.launch
 此处PC端如果使用虚拟机运行Ubuntu系统，为确保机器人与Ubuntu系统处于同一局域网中，需要将虚拟机的网络设置为桥接模式：
 ![设置网络桥接](./pics/102.png)
 
-### 3.3. <a name='App'></a>手机App 遥控
+### 手机App 遥控
 
-#### 3.3.1. <a name='APP'></a>APP蓝牙连接
+#### APP蓝牙连接
 
 如下图，先点击搜索设备搜索当前区域的蓝牙，    
 ![蓝牙连接面板](./pics/81.png)
@@ -2342,7 +2342,7 @@ roslaunch teleop_twist_joy teleop.launch
 Zbot机器人使用的蓝牙模块为BT04系列。点击即可完成连接。
 ![连接蓝牙](./pics/82.png)
 
-#### 3.3.2. <a name='APP-1'></a>APP 遥控方式简介
+#### APP 遥控方式简介
 
 APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定方向移动。
 在遥控区域上方，可切换遥控方式和增减小车控制速度。如下图切换为按键控制方式。
@@ -2368,7 +2368,7 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 
 ![改变重力灵敏度](./pics/89.png)
 
-## 4. <a name='PID'></a>PID 调参
+## PID 调参
 
 软硬件需求：
   - Zbot3 机器人    
@@ -2392,9 +2392,9 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 
 在导航栏，选择波形界面，即可查看驱动底盘发送对应数据的变化波形。有关该部分设置需在zbot驱动板程序中自行设置。
 
-## 5. <a name='-1'></a>控制器通信协议说明
+## 控制器通信协议说明
 
-### 5.1. <a name='-'></a>香橙派->驱动板控制协议
+### 香橙派->驱动板控制协议
 
 | 数据位 | 含义       | 默认值  |  说明                    |
 |:---:|:--------:|:----:|:----------------------:|
@@ -2408,7 +2408,7 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 |     |          |      |                        |
 |     |          |      |                        |
 
-### 5.2. <a name='--1'></a>驱动板->香橙派数据协议
+### 驱动板->香橙派数据协议
 
 | 数据位   | 含义      | 默认值  |  说明                     |
 |:-----:|:-------:|:----:|:-----------------------:|
@@ -2558,7 +2558,7 @@ uint8_t *ZbotSerial::twistToSerial()
 
 ```
 
-## 6. <a name='-1'></a>开塔机器人操作实验
+## 开塔机器人操作实验
 
 实验硬件：
 
@@ -2992,7 +2992,7 @@ ROS中[robot_state_publisher](http://wiki.ros.org/robot_state_publisher) 和 [ro
 ![KATA TF变换](./pics/154.png)
 
 
-## 7. <a name='ROS'></a>ROS 基础工具与指令
+## ROS 基础工具与指令
 
 1.**rosnode** -ROS节点管理工具
 
@@ -3191,7 +3191,7 @@ rosrun rqt_tf_tree rqt_tf_tree
 rosrun rqt_image_view rqt_image_view
 ```
 
-## 8. <a name='launch'></a>理解launch文件
+## 理解launch文件
 
 前面我们提到过可以通过roslaunch指令可以一次启动多个节点，现在，我们尝试通过roslaunch运行上述用键盘控制zbot3运动的功能。
 
@@ -3229,7 +3229,7 @@ roslaunch zbot3_drive zbot3_keycontrol.launch
 * [roslaunch](http://wiki.ros.org/roslaunch/Commandline%20Tools)
 * [launch文件格式](http://wiki.ros.org/roslaunch/XML)
 
-### 8.1. <a name='TF'></a>机器人TF坐标变换解析
+### 机器人TF坐标变换解析
 
 机器人系统通常具有随时间变化的许多 3D 坐标系，例如世界坐标系，基础
 坐标系等。tf 随时间跟踪所有这些框架，是处理机器人不同坐标系的一个包，
@@ -3243,9 +3243,9 @@ roslaunch zbot3_drive zbot3_keycontrol.launch
 如图为zbot小车完整的TF树图
 ![Slam 建图时的TF树](./pics/121.png)
 
-## 9. <a name='Slam'></a>Slam 建图实验
+## Slam 建图实验
 
-### 9.1. <a name='SLAM'></a>SLAM建图算法
+### SLAM建图算法
 
 操作环境及软硬件配置如下：
 
@@ -3366,7 +3366,7 @@ roslaunch zbot3_drive zbot3_slam.launch
 用键盘控制小车，使他建图完周围场景。
 ![Gmapping 建完场景](./pics/120.png)
 
-### 9.2. <a name='Gmapping'></a>Gmapping 配置文件一览
+### Gmapping 配置文件一览
 
 针对每种不同的SLAM建图方法，都有对应的配置文件。合理的参数配置能提高建图效果。现在，以Gmapping建图方法为例，我们查看其配置文件。在 **zbot3_slam**包中，打开slam_gmapping.launch, 在gmapping 节点下，我们可以看到具体配置内容。
 以下作简单说明：
@@ -3389,7 +3389,7 @@ roslaunch zbot3_drive zbot3_slam.launch
 
 有关gmapping更详细的配置说明，参考：[gmapping roswiki](http://wiki.ros.org/gmapping#External_Documentation)
 
-### 9.3. <a name='-1'></a>保存地图
+### 保存地图
 
 ```bash
 roslaunch zbot3_drive zbot3_savemap.launch
@@ -3403,7 +3403,7 @@ roslaunch zbot3_drive zbot3_savemap.launch
 如下图所以，地图文件实际上是一张图片文件。
 ![地图文件是一张图片文件](./pics/124.png)
 
-### 9.4. <a name='hector'></a>使用hector建图
+### 使用hector建图
 
 **zbot3_slam.launch** 启动文件可以指定 slamMethod 参数切换建图算法。如下使用hector建图方法
 
@@ -3413,7 +3413,7 @@ roslaunch zbot3_drive zbot3_savemap.launch
 
 ![Hector 建图](./pics/123.png)
 
-### 9.5. <a name='Cartograpger'></a>使用Cartograpger 建图
+### 使用Cartograpger 建图
 
 Cartographer是Google推出的一套基于图优化的激光SLAM算法，它同时支持2D和3D激光SLAM，可以跨平台使用，支持Laser、IMU、Odemetry、GPS等多种传感器配置。该算法可以实现实时定位和建图。Cartographer建立的栅格地图可以达到5cm的精度，该算法广泛应用于服务机器人、扫地机器人、仓储机器人、自动驾驶等领域，是最优秀的激光SLAM框架之一。
 
@@ -3445,7 +3445,7 @@ Cartographer ROS 作为Cartographer在ROS上的移植，其默认数据保存方
 roslaunch zbot3_drive zbot3_cartographer_savemap.launch
 ```
 
-## 10. <a name='Zbot3-1'></a>Zbot3 导航
+## Zbot3 导航
 
 硬件需求：     
   - Zbot3机器人
@@ -3467,7 +3467,7 @@ roslaunch zbot3_drive zbot3_cartographer_savemap.launch
 
 导航框架最终的输出是控制机器人的速度指令（geometry_msgs/Twist），这就要求机器人控制节点具备解析控制指令中线速度、角速度的能力，并且控制机器人完成相应的运动。
 
-### 10.1. <a name='movebase'></a>配置movebase
+### 配置movebase
 
  move_base 是一个开源 2D 移动机器人导航包，用于将机器人在指定的导航框架内运动到任务位置。 move_base 包执行一个完成给定导航任务的ROS行为，基于全局地图的路径规划是在机器人向下一个目的地出发前开始的，这个过程会考虑到已知的障碍物和被标记成“未知"的区域。要使机器人实际执行动作行为，本地路径规划器会监听传回来的传感器数据，并选择合适的线速度和角速度来让机器人完整地执行完全局路径规划上的当前段路径。
 
@@ -3493,7 +3493,7 @@ roslaunch zbot3_drive zbot3_cartographer_savemap.launch
  **给定导航目标**
  使用MoveBaseActionGoal消息类型来指定目标，目标由一个包含一个frame_id的ROS标准header、一个goal_id和一个PoseStamped消息类型的goal组成。其中，PoseStamped消息类型是由一个header和一个包含position和orintation的pose组成。
 
-### 10.2. <a name='amcl'></a>配置amcl
+### 配置amcl
 
 导航功能的顺利进行，离不开机器人的精准定位。自主定位即机器人在任意状态下都可以推算出自己在地图中所处的位置。ROS为开发者提供了一种自适蒙特卡罗定位方法（Adaptive Monte Carlo Localization，amcl），这是一种概率统计方法，针对已有地图使用粒子滤波器跟踪一个机器人的姿态。
 以下是AMCL的主要原理步骤：
@@ -3516,7 +3516,7 @@ AMCL的关键优势在于它的自适应性。随着时间的推移，AMCL可以
 
 给定初始位姿后，AMCL会在机器人周围随机撒一些粒子，随着机器人的运动，每个粒子也会实时跟随机器人的速度更新位姿，当粒子周边的环境状态与机器人差距较大时，就会被逐渐淘汰，反之，则会在机器人周边产生更多粒子。以此类推，粒子都集中在机器人所在位置可能性高的地方，也就是定位的结果。
 
-### 10.3. <a name='map_server'></a>使用map_server 加载地图
+### 使用map_server 加载地图
 
 导航时需要我们加载我们前面已经建图生成的地图文件，并将zbot3小车放到对应的现实场景中。加载地图文件可以用如下命令：
 
@@ -3524,7 +3524,7 @@ AMCL的关键优势在于它的自适应性。随着时间的推移，AMCL可以
     rosrun map_server map_server -f /[path]/[map_name].yaml
 ```
 
-### 10.4. <a name='zbot3'></a>运行zbot3 导航
+### 运行zbot3 导航
 
 为了方便启动，zbot3的整个导航启动配置都写在了zbot3_drive 包 **zbot3_navigation.launch**文件中。经过前面的学习，相信现在你已经能够轻松的理解该文件的内容。我们直接运行即可。
 
@@ -3598,19 +3598,19 @@ dynamic_reconfigure 功能：使用dynamic_reconfigure，你可以执行以下�
 在左侧列表中选择对应项，右侧即可看到各种可配置参数。将鼠标放置在对应参数上稍作停留，会有关于该参数的说明。
 ![rqt 动态调参](./pics/32.png)
 
-### 10.5. <a name='-1'></a>实现多点往复导航
+### 实现多点往复导航
 
 rviz上有一系列工具，如下图。按照前面教程，通过位姿评估工具校正小车在地图上的初始位置。不同于单目标导航，这次我们用发布导航点工具（publish point）在地图上分开点击几个位置，然后右键点击，可以看到小车开始依次往点击的对应位置移动过去。
 
 ![RVIZ 工具](./pics/34.png)
 
-### 10.6. <a name='-1'></a>实现小车自主探索建图
+### 实现小车自主探索建图
 
 在ROS中，有多种自主探索建图算法。其核心思想都是通过订阅slam节点发布的地图数据或通过movebase发布的代价地图数据找出当前已建立地图的边界，并发送导航目标指引小车移动过去，在移动的过程中，激光雷达的扫描范围不断扩大，不断扩大建图范围，并查找新的边界，直到指定区域扫描完毕或整个场景地图实现闭合。
 
 在noetic中，最方便配置的是**explore_lite**, Explore-lite使用了一种名为模式自适应增量搜索（PAISS）的算法。它在行动选择方面和传统的探索-开发方法有所不同，并且具有快速学习特性。PAISS算法使用一种模式自适应的搜索方法，该搜索方法根据不同的环境条件选择最佳行动。它通过实时分析当前任务和环境因素来优化行动，并且可以快速学习新的要求，而无需重新训练。AISS算法的搜索过程可分为三个步骤：1：行动选择步骤，此步骤通过实时分析当前任务和环境因素来优化行动。2：根据优化后的行动执行步骤。3：将当前边界点保存至数据库中。PAISS算法和激光雷达可以将机器人自动导航到目标地点。此过程可以概括为。1：机器人使用激光雷达来采集信息。2：机器人使用PAISS算法根据当前任务和环境因素来优化行动并执行到下一个边界点。3：重复上述步骤直到机器人达到预定的目的地。
 
-#### 10.6.1. <a name='explore_lite'></a>启动explore_lite
+#### 启动explore_lite
 
 选择一块相对宽敞的区域空间，将小车放置在没有障碍物包围的位置。确保场景中的障碍物高度能有效被激光雷达探测到，如下启动explore_lite.
 
@@ -3622,7 +3622,7 @@ rviz上有一系列工具，如下图。按照前面教程，通过位姿评估�
 
 ![explore_lite 建图](./pics/69.png)
 
-#### 10.6.2. <a name='RRT-Exploration'></a>使用RRT-Exploration建图
+#### 使用RRT-Exploration建图
 
 除了explore——lite自主探索建图方法还，还有常用RRT-Exploration 自主探索建图。rrt_exploration”是实现移动机器人的多机器人地图探索算法的ROS包。 它是基于快速探索随机树（RRT）算法。 它使用占用网格作为地图表示。该包具有5个不同的ROS节点：
 
@@ -3666,7 +3666,7 @@ rrt-exploration 框架如图所示
     roslaunch zbot3_drive zbot3_rrt_exploration.launch
 ```
 
-## 11. <a name='Zbot3SLAM'></a>Zbot3 视觉SLAM建图
+## Zbot3 视觉SLAM建图
 
 硬件需求：
   - Zbot3（双目版）
@@ -3681,7 +3681,7 @@ Zbot 机器人视觉建图依赖于奥比中光双目视觉相机。该相机ROS
 视觉SLAM建图使用ROS中的Rtabmap ROS包完成建图。该功能包同样包含一系列复杂的参数配置。具体参数配置和详细使用方法可参考：
 [Rtabmap ROS](http://wiki.ros.org/rtabmap_ros)
 
-### 11.1. <a name='Zbot3Slam'></a>运行Zbot3 视觉Slam建图
+### 运行Zbot3 视觉Slam建图
 
 ```bash
     roslaunch zbot3_drive zbot3_slam3d.launch
@@ -3705,7 +3705,7 @@ roslaunch zbot3_drive zbot3_slam3d.launch autoSlam:=true
     roslaunch zbot3_drive zbot3_slam3d.launch useLidar:=true
 ```
 
-### 11.2. <a name='RtabmapRos'></a>使用Rtabmap Ros 进行导航
+### 使用Rtabmap Ros 进行导航
 
 在进行完视觉Slam 建图后，我们就可以用新建的地图进行导航了。Rtabmap ROS包不仅能够生成3d 点云图，还能够根据生成的3d点云数据提供定位，由此实现导航功能。 遗憾的是zbot小车只能在二维平面运动。但我们仍可以简单导航实验。
 
@@ -3716,7 +3716,7 @@ roslaunch zbot3_drive zbot3_navigation3d.launch
 
 该launch 文件同视觉Slam 卵巢文件没有区别，仅是把movebase 功能包加入进去,再借助locallization 参数确保Rtabmap 功能包再启动时不会清除上一次保存的3d点云数据文件。
 
-## 12. <a name='Zbotfollow'></a>Zbot follow 功能包功能说明和使用
+## Zbot follow 功能包功能说明和使用
 
 Zbot follow 功能包里面包含了一些zbot 跟随功能的节点实现。如下一一介绍。
 
@@ -3761,7 +3761,7 @@ roslaunch zbot_follow zbot3_object_follow.launch
 
 !
 
-## 13. <a name='ZbotMonitor'></a>Zbot Monitor 使用说明
+## Zbot Monitor 使用说明
 
 Zbot Monitor 是基于Qt写的Zbot 机器人用户界面交互程序。可方便用户快速打开基本功能。对Zbot机器人进行配置与状态监测。其主界面如下图所示：
 
@@ -3831,7 +3831,7 @@ Zbot通讯配置可以方便用户获取Zbot当前网络下的IP地址以及配�
     点击后打开软件设置页，顶部添加命令区域可以为功能页功能选择下拉框加入新功能配置。点击Test 测试按钮测试测试启动功能测试对应指令是否输入正确。点击添加按钮完成添加。删除命令下拉框则可以删除对应功能。讯飞语音API密匙需要填入从讯飞语音识别服务平台的API密码，方可支持语音指令功能。远端账号设置区域则可以设置多机通讯时主机端账号和密码，使功能运行在远端。
     日志保存位置则指定点击日志保存按钮时日志文件的默认保存位置。
 
-### 13.1. <a name='Zbot'></a>Zbot 语音控制
+### Zbot 语音控制
 
 功能介绍
 随着电子产品的日益发展，语音识别技术广泛出现在不同的场景中，例如智能家居、语音助手、电话客服和机器人导游等。而随着技术的不断发展，机器人的语音识别正在变得越来越准确和可靠，这进一步促进机器人在各种领域的应用。
@@ -3844,7 +3844,7 @@ Zbot3的语音控制功能集成在Zbot Moitor 程序上。参考上面Zbot Moni
 
 语音识别结果发布的话题在 **/zbot_monitor/voice_cmd** 上，用户可以方便的订阅该话题实现语音功能扩展。
 
-### 13.2. <a name='ZbotMonitor-1'></a>Zbot Monitor 开塔机器人面板
+### Zbot Monitor 开塔机器人面板
 
 操作环境及软硬件配置如下：
 
@@ -3865,7 +3865,7 @@ Zbot3的语音控制功能集成在Zbot Moitor 程序上。参考上面Zbot Moni
 
 右侧单步移动按钮可以控制机器人在各坐标上进行单步移动，移动步长为step 下拉框当前选择的步长。
 
-## 14. <a name='-1'></a>开塔机器人快速上手
+## 开塔机器人快速上手
 
 1. 指令说明
 
@@ -3935,7 +3935,7 @@ Zbot3的语音控制功能集成在Zbot Moitor 程序上。参考上面Zbot Moni
 
 
 
-## 15. <a name='-1'></a>Zbot手势控制    
+## Zbot手势控制    
 实验硬件：
 
   - Zbot3（双目版）    
@@ -4073,3 +4073,4 @@ rviz中地图场景如图所示。
 ![识别到并拿取货物](./pics/174.jpg)
 
 拿去货物后，会自动导航自设定终点。
+![拿取货物返回起始点](./pics/175.jpg)
