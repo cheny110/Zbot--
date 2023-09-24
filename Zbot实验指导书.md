@@ -568,6 +568,21 @@ uint8_t *ZbotSerial::twistToSerial()
 
 ## 6. <a name='-1'></a>开塔机器人操作实验
 
+- 实验硬件：
+
+    zbot3机器人（KATA版）
+
+    带有ssh和VNC的个人电脑
+- 实验目的
+
+    1.了解ROS机器人的URDF模型
+
+    2.掌握ROS机器人的TF变换工具，使用robot_state_publisher和robot_joint_publisher发布实体机器人坐标变换状态。
+
+    3.掌握使用rosservice 工具发布相应的服务请求。
+
+    4.了解通过zbot 控制面板界面程序控制KATA机器人移动。
+
 带开塔机器人的zbot上有一个开塔机器人。可以实现周围物体的抓取于搬运。开塔机器人结构及关机示意图如图所示。
 ![开塔机器人示意图](./pics/77.png)
 
@@ -647,8 +662,19 @@ rosservice call /kata/go_home
 ### 查看kata机器人urdf模型
 
 带kata六轴机器人款zbot在运行“kata_driver_ros.launch” 启动文件时，会一并启动**kata_state_publisher**和**kata_joint_publisher**节点。发布kata机器人模型信息和轴关节TF变换信息。可以在RVIZ中查看kata机器人模型与实体kata机器人联动。如下图所示。在运动zbot3 bringup 启动文件后，运行
-kata机器人启动文件**kata_driver_ros.launch**，等待kata机器人复位成功。打开rviz,添加两个RobotModel插件。将其中一个
+kata机器人启动文件**kata_driver_ros.launch**，等待kata机器人复位成功。打开rviz,添加两个RobotModel插件。将其中一个**Robot_Description** 改为**kata/robot_description**。此时，控制KATA实体机器人移动，KATA机器人模型也将跟随移动。
 ![KATA URDF](./pics/153.png)
+
+### URDF 简介
+URDF全称为Unified Robot Description Format，中文可以翻译为“统一机器人描述格式”。与计算机文件中的.txt文本格式、.jpg图像格式等类似，URDF是一种基于XML规范、用于描述机器人结构的格式。根据该格式的设计者所言，设计这一格式的目的在于提供一种尽可能通用的机器人描述规范。从机构学角度讲，机器人通常被建模为由连杆和关节组成的结构。连杆是带有质量属性的刚体，而关节是连接、限制两个刚体相对运动的结构。关节也被成为运动副。通过关节将连杆依次连接起来，就构成了一个个运动链（也就是这里所定义的机器人模型）。一个URDF文档即描述了这样的一系列关节与连杆的相对关系、惯性属性、几何特点和碰撞模型。具体来
+- 机器人模型的运动学与动力学描述
+- 机器人的几何表示
+- 机器人的碰撞模型
+通常，一个实体机器人的URDF模型可以由3D建模软件进行导出，以保留其本身结构的材质与纹理。如Solidwork软件可以通过安装**SolidWorks-to-URDF Exporter** 插件到处URDF模型。有关该部分知识，参考：[Export a SolidWorks Assembly to URDF](http://wiki.ros.org/sw_urdf_exporter/Tutorials/Export%20an%20Assembly)
+
+ROS中[robot_state_publisher](http://wiki.ros.org/robot_state_publisher) 和 [robot_jpint_publisher]()可以根据URDF模型发布机器人各关节的坐标变换。可以方便我们使用tf/tf2_ros 等工具获取各关节点的空间变换关系。可以借助ros rqt_tf_tree工具查看。如下图所示，以KATA 六轴机器人为例：其中，joint1 至 joint5 分别对应1轴到5轴。6轴由于Solidwork3D模型未单独分出，故不包含第六轴。
+![KATA TF变换](./pics/154.png)
+
 
 ## 7. <a name='ROS'></a>ROS 基础工具与指令
 
