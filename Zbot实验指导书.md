@@ -716,6 +716,248 @@ bool res
 x~yaw 描述KATA机器人位姿控制服务请求所需要的基本的空间描述参数，类型为64位浮点型。moveMethod指定了机器人运动方式，类型为字符串。
 relative指定了以上坐标是否使用相对移动，类型为布尔型。res为服务请求的返回结果。请求参数与返回结果间用“---”隔开。
 
+### 在节点中添加服务提供
+
+以KATA机器人各项服务为例子。KATA机器人驱动包为kata_drive。在包下创建文件夹srv.在里面添加各项服务描述文件。各项服务文件名采用首字母大写命名。
+```
+srv
+    AxisHome.srv
+    Connect.srv
+    Disconnect.srv
+    GoCamPose.srv
+    GoHome.srv
+    GoZero.srv
+    PoseControl.srv
+    PumpControl.srv
+    SaveCamPose.srv
+    SetSpeed.srv
+    SetToolOffset.srv
+```
+以如上介绍过的位姿控制为例，在服务文件中填写服务请求参数及服务返回数据。
+```plain
+#PoseControl.srv
+float64 x
+float64 y
+float64 z
+float64 roll
+float64 pitch
+float64 yaw
+string moveMethod
+float32 speed
+bool relative
+---
+bool res
+```
+
+接着，打开包目录下包描述文件package.xml，添加构建服务所需的包依赖项。其中包括自定义服务类型依赖的来自其他包提供的数据类型，在构建依赖项中添加**message_generation**,在运行依赖项中添加**message_runtime**。
+```plain
+ <depend>kdl_parser</depend>
+  <depend>rosconsole</depend>
+  <depend>roscpp</depend>
+  <depend>rostime</depend>
+  <depend>sensor_msgs</depend>
+  <depend>tf</depend>
+  <depend>tf2_ros</depend>
+  <depend>tf2_kdl</depend>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>rospy</build_depend>
+  <build_depend>std_msgs</build_depend>
+
+  <build_export_depend>rospy</build_export_depend>
+  <build_export_depend>std_msgs</build_export_depend>
+  <exec_depend>rospy</exec_depend>
+  <exec_depend>std_msgs</exec_depend>
+  <build_depend>message_generation</build_depend>
+  <exec_depend>message_runtime</exec_depend>
+
+  <build_depend>liborocos-kdl-dev</build_depend>
+  <build_depend>liburdfdom-headers-dev</build_depend>
+  <build_depend>eigen</build_depend>
+
+  <build_export_depend>liborocos-kdl-dev</build_export_depend>
+
+```
+
+打开包目录下CmakeLists.txt 配置文件，添加生成服务文件。如下所示
+```plain
+...
+
+ add_service_files(
+  FILES
+    PoseControl.srv
+    PumpControl.srv
+    AxisHome.srv
+    GoHome.srv
+    GoZero.srv
+    SetSpeed.srv
+    SetToolOffset.srv
+    Connect.srv
+    Disconnect.srv
+    GoCamPose.srv
+    SaveCamPose.srv
+ )
+ 
+ ...
+```
+添加构建依赖
+
+```plain
+
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  std_msgs
+  actionlib 
+  kdl_parser
+  rostime
+  tf2_kdl
+  tf2_ros
+  message_generation
+)
+
+catkin_package(
+  INCLUDE_DIRS include
+  LIBRARIES ${PROJECT_NAME}_solver kata_joint_listener
+  DEPENDS roscpp kdl_parser orocos_kdl rosconsole rostime sensor_msgs tf2_ros tf2_kdl urdfdom_headers
+)
+```
+取消注释generate_msgs,并完善消息/服务构建依赖
+
+```plain
+ generate_messages(
+   DEPENDENCIES
+   std_msgs
+ )
+```
+
+在工作空间目录下执行catkin_make --pkg kata_drive 重新编译kata_drive包，使其生成对应各服务的c++程序文件和python脚本文件。
+
+然后，在节点中引入相关服义消息类型并完成服务提供实现。仍以kata机器人为例子。（其为python实现）
+```python
+from kata_drive.srv import (
+    PoseControl,
+    AxisHome,
+    GoZero,
+    GoHome,
+    SetSpeed,
+    SetToolOffset,
+    Connect,
+    Disconnect,
+    PumpControl,
+    AxisHomeRequest,
+    GoHomeRequest,
+    GoZeroRequest,
+    PoseControlRequest,
+    SetSpeedRequest,
+    SetToolOffsetRequest,
+    ConnectRequest,
+    DisconnectRequest,
+    GoCamPose,
+    SaveCamPose,
+    GoCamPoseRequest,
+    SaveCamPoseRequest,
+    PumpControlRequest
+
+)
+```
+在节点中添加服务对象
+```python
+#Serice初始话参数： 服务名，服务类型，服务回调函数
+self.axisHomeService = rospy.Service("/kata/axis_home", AxisHome, self.receiveService) 
+        self.goZeroService = rospy.Service("/kata/go_zero", GoZero, self.receiveService)
+        self.goHomeService = rospy.Service("/kata/go_home", GoHome, self.receiveService)
+        self.setSpeedService = rospy.Service("/kata/set_speed", SetSpeed, self.receiveService)
+        self.setToolOffsetService = rospy.Service(
+            "kata/set_tool_offset", SetToolOffset,self.receiveService
+        )
+        self.connectService=rospy.Service("/kata/connect",Connect,self.receiveService)
+        self.disconnectService=rospy.Service("/kata/disconnect",Disconnect,self.receiveService)
+        self.saveCamPoseService=rospy.Service("/kata/save_camera_pose",SaveCamPose,self.receiveService)
+        self.goCamPoseService=rospy.Service("/kata/go_camera_pose",GoCamPose,self.receiveService)
+        self.statusMsg = RobotStatus()
+        self.statusPub = rospy.Publisher("/kata/status", RobotStatus, queue_size=3)
+        self.jointsPub=rospy.Publisher("/kata/joints_angle",JointsAngle,queue_size=1)
+        self.pumpControlService=rospy.Service("/kata/pump_control",PumpControl,self.pumpControl)
+```
+
+在服务回调函数中完成服务实现。kata机器人由于串口通信机制以及其无法立刻完成动作，获取服务结果。这里只在服务回调函数中记录服务，并返回结果。各服务处理
+在时间循环中实现。
+```python
+def receiveService(self,request):
+    if self.taskDone:
+        self.taskDone=False
+        self.request=request
+        return True
+    else:
+        return False
+
+
+#事件循环
+if not self.taskDone:
+    if isinstance(self.request,AxisHomeRequest):
+        self.axisHome(self.request)
+    elif isinstance(self.request,GoZeroRequest):
+        self.goZero(self.request)
+    elif isinstance(self.request,GoHomeRequest):
+        self.goHome(self.request)
+    elif isinstance(self.request,PoseControlRequest):
+        self.setToolPose(self.request)
+    elif isinstance(self.request,SetSpeedRequest):
+        self.setSpeed(self.request)
+    elif isinstance(self.request,SetToolOffsetRequest):
+        self.setToolOffset(self.request)
+    elif isinstance(self.request,ConnectRequest):
+        self.connect(self.request)
+    elif isinstance(self.request,DisconnectRequest):
+        self.disconnect(self.request)
+    elif isinstance(self.request,SaveCamPoseRequest):
+        self.saveCameraPosition(self.request)
+    elif isinstance(self.request,GoCamPoseRequest):
+        self.goCameraPosition(self.request)
+    self.taskDone=True
+self.rate.sleep()
+
+```
+
+### 在节点中创建服务请求端
+
+以zbot控制面板程序为例子，其服务请求使用以上kata机器人的服务。
+
+在节点包描述文件中添加服务依赖包
+```xml
+ <depend>kata_drive</depend>
+```
+在CmakeLists.txt 文件中添加依赖包
+```plain
+find_package(catkin REQUIRED COMPONENTS
+  roscpp
+  rospy
+  sensor_msgs
+  std_msgs
+)
+```
+
+在对应节点脚本程序中引入服务类型
+```
+文件
+from kata_drive.srv import (
+    PoseControl,
+    AxisHome,
+    GoHome,
+    GoZero,
+    SetSpeed,
+    Connect,
+    Disconnect,
+    PumpControl,
+    PoseControlRequest,
+    GoCamPose,
+    SaveCamPose
+
+)
+```
+
+
 
 
 ### URDF 简介
