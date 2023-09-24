@@ -639,7 +639,7 @@ roslaunch kata_drive kata_driver_ros.launch
     relative: true}"
     ```
 
-很多时候，通过这种方式控制是非常不方便的。通过服务方式调用适合用作程序接口嵌入到我们的自定义脚本中，但不适合用户直接控制。为此，在zbot_monitor UI 程序功能面板中集成了kata dashboard 插件。如下图所示
+很多时候，通过这种方式控制是非常不方便的。通过服务方式调用适合用作程序接口嵌入到我们的自定义脚本中，但不适合用户直接控制。为此，在zbot_monitor UI 程序功能面板中集成了kata dashboard 插件。如下图所示。
 
 ![kata 面板](./pics/78.png)
 
@@ -955,8 +955,41 @@ from kata_drive.srv import (
 
 )
 ```
+在节点脚本程序中添加服务代理对象
+```python
+self.poseConSer.call(pose.x,pose.y,pose.z,pose.roll,pose.pitch,pose.yaw,pose.moveMethod, pose.speed,pose.relative)
 
+    def loadServices(self):
+        self.connSer = rospy.ServiceProxy("/kata/connect", Connect, True)
+        self.disconnSer = rospy.ServiceProxy("/kata/disconnect", Disconnect, True)
+        self.pumpSer = rospy.ServiceProxy("kata/pump_control", PumpControl, True)
+        self.goZeroSer = rospy.ServiceProxy("kata/go_zero", GoZero, True)
+        self.axisHomeSer = rospy.ServiceProxy("kata/axis_home", AxisHome, True)
+        self.goHomeSer = rospy.ServiceProxy("kata/go_home", GoHome, True)
+        self.setSpeedSer = rospy.ServiceProxy("kata/set_speed", SetSpeed, True)
+        self.poseConSer = rospy.ServiceProxy("kata/pose_control", PoseControl, True)
+        self.saveCamPoseSer = rospy.ServiceProxy("kata/save_camera_pose", SaveCamPose, True)
+        self.goCamPoseSer=rospy.ServiceProxy("kata/go_camera_pose",GoCamPose,True)
+```
+在节点程序合适位置添加服务请求
 
+```python
+@Slot()
+    def goHome(self):
+        self.goHomeSer.call()
+        rospy.loginfo("??????????...")
+
+    @Slot()
+    def saveCameraPose(self):
+        self.saveCamPoseSer.call()
+        rospy.loginfo("????????????????????.")
+
+    @Slot()
+    def goCameraPose(self):
+        self.goCamPoseSer.call()
+        rospy.loginfo("????????????.")
+...
+```
 
 
 ### URDF 简介
@@ -1528,7 +1561,7 @@ rviz上有一系列工具，如下图。按照前面教程，通过位姿评估�
 
 #### 10.6.2. <a name='RRT-Exploration'></a>使用RRT-Exploration建图
 
-除了explore——lite自主探索建图方法还，还有常用的RRT-Exploration 自主探索建图。rrt_exploration”是实现移动机器人的多机器人地图探索算法的ROS包。 它是基于快速探索随机树（RRT）算法。 它使用占用网格作为地图表示。该包具有5个不同的ROS节点：
+除了explore——lite自主探索建图方法还，还有常用RRT-Exploration 自主探索建图。rrt_exploration”是实现移动机器人的多机器人地图探索算法的ROS包。 它是基于快速探索随机树（RRT）算法。 它使用占用网格作为地图表示。该包具有5个不同的ROS节点：
 
 1. 全局RRT边界点检测器节点。
 2. 局部RRT边界点检测器节点。
