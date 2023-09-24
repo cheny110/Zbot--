@@ -881,8 +881,7 @@ self.axisHomeService = rospy.Service("/kata/axis_home", AxisHome, self.receiveSe
         self.pumpControlService=rospy.Service("/kata/pump_control",PumpControl,self.pumpControl)
 ```
 
-在服务回调函数中完成服务实现。kata机器人由于串口通信机制以及其无法立刻完成动作，获取服务结果。这里只在服务回调函数中记录服务，并返回结果。各服务处理
-在时间循环中实现。
+在服务回调函数中完成服务实现。kata机器人由于串口通信机制以及其无法立刻完成动作，获取服务结果。这里只在服务回调函数中记录服务，并返回结果。各服务处理在时间循环中实现。
 ```python
 def receiveService(self,request):
     if self.taskDone:
@@ -1212,11 +1211,8 @@ roslaunch zbot3_drive zbot3_keycontrol.launch
 
 机器人系统通常具有随时间变化的许多 3D 坐标系，例如世界坐标系，基础
 坐标系等。tf 随时间跟踪所有这些框架，是处理机器人不同坐标系的一个包，
-机器人不同部位和世界的坐标系以 tree structure 的形式存储起来，tf 可以使
-任何两个坐标系之间的点、向量相互转化。
-对于从单片机控制转到 ROS 上的读者，ROS 自带的 tf 可以大大加深其对机
-器人的理解。为了方便理解 tf 坐标变换，我们需要借助 rqt 工具，下面我们执
-行如下指令可以查看TF树。
+机器人不同部位和世界的坐标系以 tree structure 的形式存储起来，tf 可以使任何两个坐标系之间的点、向量相互转化。
+对于从单片机控制转到 ROS 上的读者，ROS 自带的 tf 可以大大加深其对机器人的理解。为了方便理解 tf 坐标变换，我们需要借助 rqt 工具，下面我们执行如下指令可以查看TF树。
 
 ```bash
     rosrun rqt_tf_tree rqt_tf_tree
@@ -1252,7 +1248,7 @@ karto 的建图算法。
     因此无法使用里程计。而 cartographer 是用于手持激光雷达完成 SLAM 过程，也
     就是说可以完全不需要里程计的信息。
 
-在zbot3_drive_node 节点中，我们已经实现了将ROS速度消息发送到驱动板，并接受驱动板反馈的传感器数据来发布 **/odom_raw** 里程计话题和 **/imu**惯导传感器话题。感兴趣的可在 /opt/ros/zbot3_ws/src/zbot3_drive/include/zbot3.hpp文件中查看源代码学习。这里不做过多讲解。我们的驱动节点通过发布这两个话题即可实时将zbot3小车的位姿信息和运动状态信息发送给其他订阅相应话题的节点。有关此部分代码实现如下
+在zbot3_drive_node 节点中，我们已经实现了将ROS速度消息发送到驱动板，并接受驱动板反馈的传感器数据来发布 **/odom_raw** 里程计话题和 **/imu**惯导传感器话题。感兴趣的可在 /opt/ros/zbot3_ws/src/zbot3_drive/include/zbot3.hpp文件中查看源代码学习。这里不做过多讲解。我们的驱动节点通过发布这两个话题即可实时将zbot3小车的位姿信息和运动状态信息发送给其他订阅相应话题的节点。有关此部分代码实现如下：
 
 ```c++
 void ZbotSerial::publishImu()
@@ -1386,7 +1382,6 @@ roslaunch zbot3_drive zbot3_savemap.launch
 
 ```
    roslaunch zbot3_drive zbot3_savemap.launch slamMethod:=hector 
-
 ```
 
 ![Hector 建图](./pics/123.png)
