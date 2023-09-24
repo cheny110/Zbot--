@@ -4074,3 +4074,40 @@ rviz中地图场景如图所示。
 
 拿去货物后，会自动导航自设定终点。
 ![拿取货物返回起始点](./pics/175.jpg)
+
+有关绿色方块定位识别与定位相关抓取如下
+```python
+def cargoLocate(self):
+    self.kataPicPoseService.call()
+    rospy.sleep(rospy.Duration.from_sec(3))
+    hsvImg=cv2.cvtColor(self.rgbImage,cv2.COLOR_BGR2HSV)
+    filtered=cv2.inRange(hsvImg,tuple(colorHSV[GREEN_IDX][0]),tuple(colorHSV[GREEN_IDX][1]))
+    while not self.located:
+        contours=cv2.findContours(filtered.copy(),cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+        cnts=imutils.grab_contours(contours)
+        for cnt in cnts:
+            moment=cv2.moments(cnt,binaryImage=True)
+            if moment["m00"]!=0.:
+                cX = int(moment["m10"] / moment["m00"])
+                cY = int(moment["m01"] / moment["m00"])
+                cv2.drawContours(self.rgbImage, [cnt], -1, (0, 255, 0), 2)
+                cv2.circle(self.rgbImage,(cX,cY),5,(0,0,255),-1)
+                #return cX,cY
+                self.kataTakePose.x=-0.329*cX+150
+                self.kataTakePose.y=0.075*cY-300
+                self.kataTakePose.z=125
+                self.located=True
+        cv2.imshow("checked",self.rgbImage)
+        cv2.waitKey(10)
+    self.kataPoseCtrlByService(self.kataTakePose)
+    rospy.sleep(2)
+    self.pumpRequest.on=True
+    self.kataPumpControlService.call(self.pumpRequest)
+    rospy.sleep(0.2)
+    self.kataTakePose.z+=30
+    self.kataPoseCtrlByService(self.kataTakePose)
+    rospy.sleep(1)
+    self.kataPoseCtrlByService(self.kataHoldPose)
+    rospy.sleep(3)
+
+```
