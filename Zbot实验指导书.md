@@ -10,9 +10,14 @@ Zbot3支持ssh远程登录后进行开发，如果大家不习惯远程命令行
 
 操作环境及软硬件配置如下：
 
-* Zbot3机器人
-PC：Windows/Linux  + VSCode
+- Zbot3机器人
+- PC：Windows/Linux  + VSCode
 
+
+实验目的 ：
+1. 能够完成ROS开发环境基础配置
+
+步骤
 1. 安装VSCode
 
     VSCode官方提供多种操作系统下的安装包，大家可以根据自己使用的操作系统选择下载:
@@ -46,7 +51,7 @@ PC：Windows/Linux  + VSCode
 
 ### 1.2. <a name='VNC'></a>VNC远程桌面工具
 
-当我们使用自己的PC远程连接Zbot3 机器人时，有时候仅靠终端会显得非常不变。因为终端无法为我们提供图形化的显示界面。我们所运行的程序凡是有UI界面的都无法完全借助终端远程运行。此时，一款合适的远程桌面工具就会非常有用。VNCViewer 是一款通用远程桌面协议显示软件。不同于向日葵和toDesk，我们不受会员约束，使用方便。其同样支持多种操作平台和操作系统
+当我们使用自己的PC远程连接Zbot3 机器人时，有时候仅靠终端会显得非常不变。因为终端无法为我们提供图形化的显示界面。我们所运行的程序凡是有UI界面的都无法完全借助终端远程运行。此时，一款合适的远程桌面工具就会非常有用。VNCViewer 是一款通用远程桌面协议显示软件。不同于向日葵和toDesk，VNC不受会员约束，使用方便。其同样支持多种操作平台和操作系统
 [RealVncViewer 下载地址]<https://www.realvnc.com/en/connect/download/viewer/>
 请选择适合自己的系统版本下载和安装。
 
@@ -105,11 +110,20 @@ PC：Windows/Linux  + VSCode
 
 ### 2.1. <a name='Zbot3'></a>启动Zbot3 底盘
 
+- 硬件需求
+
+    zbot3 机器人
+
+    带ssh，VNC桌面的个人电脑
+
+- 实验目的
+    掌握ROS 节点控制基础指令，了解ROS话题通讯机制. 
+
 Zbot机器人上电开关位于Zbot尾部显示屏下方。Zbot系统默认上电后自动启动。
 
 ![Zbot 开关部分](./pics/92.png)
 
-在PC端通过SSH连接OriginBot
+在PC端通过SSH连接Zbot3
 
 ```bash
 ssh orangepi@192.168.1.105
@@ -117,7 +131,7 @@ ssh orangepi@192.168.1.105
 
 ![Zbot ssh 建立连接](./pics/93.png)
 
-连接成功后，OriginBot机器人启动的命令为：
+连接成功后，Zbot3机器人启动的命令为：
 
 ```bash
 roslaunch zbot3_drive zbot3_bringup.launch disableEkf:=false
@@ -180,6 +194,11 @@ ROS中可以利用这种方式根据来自不同来源的（部分）姿态测�
 
 ![zbot 3d 模型](./pics/94.png)
 
+启动zbot 唤起文件，会运行起zbot底盘驱动。默认会启动键盘控制程序。需要说明的是开机时zbot 默认处于急停使能状态，无法进行运动控制。此时应手动取消急停状态。通过VNC连接远程桌面，或者在zbot显示屏上可以看到自动运行的zbot控制面板程序。可以找到急停控制按钮。点击该按钮即改变急停状态。取消急停状态后，即可使用键盘按钮控制zbot3机器人移动.方向按钮为 u,i,o,j,k,l,m,",","." 按键Q加速，按键Z减速。
+
+![急停按钮](./pics/152.png)
+
+
 ### 2.3. <a name='-1'></a>启动雷达
 
 ```bash
@@ -235,7 +254,7 @@ rosrun rqt_image_view rqt_image_View
 
 ### 2.6. <a name='-1'></a> 机器人充电方法
 
-控制器程序中加入了电池保护，电压低于9.8V时蜂鸣器会常响报警，此时就需要尽快充电了。**请使用OriginBot套件中自带的充电器进行充电。**
+控制器程序中加入了电池保护，电压低于9.8V时蜂鸣器会常响报警，此时就需要尽快充电了。**请使用zbot3套件中自带的充电器进行充电。**
 * 确定机器人电源开关处于“OFF”状态；
 
 * 将充电器DC口插到控制器的充电口上；
@@ -261,7 +280,7 @@ orangepi：Ubuntu (20.04) + ROS (Noetic)
 
 ![Zbot ssh 建立连接](./pics/93.png)
 
-连接成功后，OriginBot机器人启动的命令为：
+连接成功后，zbot3机器人启动的命令为：
 
 ```bash
 roslaunch zbot3_drive zbot3_bringup.launch
@@ -388,7 +407,7 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 | 数据位 | 含义       | 默认值  |  说明                    |
 |:---:|:--------:|:----:|:----------------------:|
 | 1   | 帧头       | 0x7B | 固定值                    |
-| 2   | 气泵开关     | 0    | 0：关闭 1：开启              |
+| 2   | 急停控制     | 0    | 1：使能急停 2：失能急停   0：不控制           |
 | 3~4 | x方向目标速度值 |      | 放大1000倍，低位在前，高位在后，1位小数 |
 | 5~6 | y方向目标速度值 |      | 放大1000倍，低位在前，高位在后，1位小数 |
 | 7~8 | z方向目标速度值 |      | 放大1000倍，低位在前，高位在后，1位小数 |
@@ -402,7 +421,7 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 | 数据位   | 含义      | 默认值  |  说明                     |
 |:-----:|:-------:|:----:|:-----------------------:|
 | 1     | 帧头      | 0x7B | 固定值                     |
-| 2     | 保留位     | 0    |                         |
+| 2     | 模式状态     |     |  0：自动 1：手动 2：自动，急停  3：手动急停     | 运行状态位   |                         |
 | 3~4   | x方向速度值  |      | 放大1000倍，低位在前，高位在后，1位小数  |
 | 5~6   | y方向速度值  |      | 放大1000倍，低位在前，高位在后，1位小数  |
 | 7~8   | z方向速度值  |      | 放大1000倍，低位在前，高位在后，1位小数  |
@@ -421,17 +440,27 @@ APP 默认遥控方式为遥感控制。拖拽遥感，小车即可朝向指定�
 ``` c++
 uint8_t *ZbotSerial::twistToSerial()
     {
-        uint8_t *serialData = new uint8_t[11];
+        uint8_t *serialData = new uint8_t[15];
         uint8_t *temp = new uint8_t[2];
-        memset(serialData, 0, 11); // initialize
+
+        static int kp, ki;
+        //get pid param from server
+        nh.getParam("/zbot3_drive/Kp",kp);
+        nh.getParam("/zbot3_drive/Ki",ki);
+
+        memset(serialData, 0, 15); // initialize
         serialData[0] = 0x7B;      // frame header
-        if (pumpOn)
+        if (emergencyControl==EMERGENCY_ON)
         {
+            // enable emergency stop.
             serialData[1] = 1;
         }
-        else
+        else if(emergencyControl==EMERGENCY_CANCLE)
         {
-            serialData[1] = 0;
+            serialData[1] = 2;
+            emergencyControl=0;
+        }else{
+            serialData[1]=0;
         }
         if (twist != nullptr)
         {
@@ -462,10 +491,27 @@ uint8_t *ZbotSerial::twistToSerial()
             {
                 ROS_ERROR_STREAM("无效的z方向速度值!");
             }
-            serialData[9] = checkSum(serialData, 9);
-            serialData[10] = 0x7D;
-            // twist->linear.x=twist->linear.y=twist->linear.z=0;
-            // twist->angular.x=twist->angular.y=twist->angular.z=0;
+            temp=shortConverter(kp);
+            if (temp != nullptr)
+            {
+                memcpy(serialData + 9 * sizeof(uint8_t), temp, sizeof(ushort));
+            }
+            else
+            {
+                ROS_ERROR_STREAM("无效的kp参数!");
+            }
+            temp=shortConverter(ki);
+            if (temp != nullptr)
+            {
+                memcpy(serialData + 11 * sizeof(uint8_t), temp, sizeof(ushort));
+            }
+            else
+            {
+                ROS_ERROR_STREAM("无效的ki参数!");
+            }
+            serialData[13] = checkSum(serialData, 13);
+
+            serialData[14] = 0x7D;
             delete temp;
             return serialData;
         }
@@ -476,10 +522,28 @@ uint8_t *ZbotSerial::twistToSerial()
 香橙派解析zbot3 底盘发送的传感器数据相关函数实现
 
 ```c++
-void ZbotSerial::decodeSerial(uint8_t *data)
+    void ZbotSerial::decodeSerial(uint8_t *data)
     {
         // decode serial data
-        status->stopFlag = data[1] ? true : false; //保留
+        switch(data[1]){
+            case 0:
+                status->emergency=0;
+                status->controlMode=AUTO_MODE;
+                break;
+            case 1 :
+                status->emergency=0;
+                status->controlMode=MANUAL_MODE;
+                break;
+            case 2:
+                status->emergency=1;
+                status->controlMode=AUTO_MODE;
+                break;
+            case 3:
+                status->emergency=1;
+                status->controlMode=MANUAL_MODE;
+                break;
+                    
+        }
         status->velocity.x = shortToFloat(&data[2]) / 1000;
         status->velocity.y = shortToFloat(&data[4]) / 1000;
         status->velocity.z = shortToFloat(&data[6]) / 1000;
@@ -493,6 +557,11 @@ void ZbotSerial::decodeSerial(uint8_t *data)
         status->angular.z = shortToFloat(&data[18]) * GYROSCOPE_RATIO;
         // battery
         status->battery = shortToFloat(&data[20]) / 1000.0;
+
+        int kp_rec=int(shortToFloat(&data[22]));
+        int ki_rec=int(shortToFloat(&data[24]));
+        //ROS_INFO_STREAM("zbot3_drive Emergency:"<<status->emergency);
+
     }
 
 ```
@@ -526,13 +595,6 @@ void ZbotSerial::decodeSerial(uint8_t *data)
 * /kata_cam/start_capture  :usb相机开始捕获
 * /kata_cam/stop_capture   ：usb相机停止捕获
 
-需要说明的是，开塔机器人末端吸盘驱动气泵由驱动板控制，所以气泵的控制服务在zbot地盘驱动节点上。控制吸盘气泵的开启与关闭，需要启动zbot底盘驱动服务
-
-```bash
-    roslaunch zbot3_drive zbot3_bringup.launch
-```
-
-现在，你可以通过**rosservice list** 指令查看到关于气泵的控制服务**/kata/pump_control**
 
 现在简单介绍一下如何通过service服务方式控制开塔机器人。
 
@@ -581,6 +643,12 @@ rosservice call /kata/go_home
 
 有关开塔机器人的官方使用手册，参考如下:
 [开塔机器人用户手册](https://ojrjw1627z.k.topthink.com/@1epkq57pdv/1Mirobotkuaisurumenzhinan.html)
+
+### 查看kata机器人urdf模型
+
+带kata六轴机器人款zbot在运行“kata_driver_ros.launch” 启动文件时，会一并启动**kata_state_publisher**和**kata_joint_publisher**节点。发布kata机器人模型信息和轴关节TF变换信息。可以在RVIZ中查看kata机器人模型与实体kata机器人联动。如下图所示。在运动zbot3 bringup 启动文件后，运行
+kata机器人启动文件**kata_driver_ros.launch**，等待kata机器人复位成功。打开rviz,添加两个RobotModel插件。将其中一个
+![KATA URDF](./pics/153.png)
 
 ## 7. <a name='ROS'></a>ROS 基础工具与指令
 
